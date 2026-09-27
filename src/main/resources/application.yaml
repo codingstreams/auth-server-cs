@@ -45,7 +45,7 @@ redis:
   uri: ${REDIS_URI}
 
 server:
-  port: 9090
+  port: ${PORT:9090}
 
 app:
   social-login:

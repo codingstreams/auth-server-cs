@@ -1,0 +1,10 @@
+target/
+.git/
+.gitignore
+.agentignore
+.idea/
+.prompts/
+.env*
+certs/*.pem
+certs/*.key
+*.md
