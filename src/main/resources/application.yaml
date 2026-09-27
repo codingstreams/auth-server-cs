@@ -59,3 +59,8 @@ app:
 
   mailtrap:
     token: ${MAILTRAP_TOKEN}
+
+security:
+  jwt:
+    private-key-path: ${PRIVATE_KEY_PATH}
+    public-key-path: ${PUBLIC_KEY_PATH}
