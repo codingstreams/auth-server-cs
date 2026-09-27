@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title th:text="${title} + ' - Auth Server'">Auth Server</title>
+
+  <!-- Theme initialization script to prevent FOUC (Flash of Unstyled Content) -->
+  <script>
+    (function () {
+      try {
+        const savedTheme = localStorage.getItem('auth_theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: light)').matches;
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {
+      }
+    })();
+  </script>
+
+  <link href="/css/login.css" rel="stylesheet" th:href="@{/css/login.css}">
+  <script defer src="/js/login.js" th:src="@{/js/login.js}"></script>
+</head>
+<body></body>
+</html>

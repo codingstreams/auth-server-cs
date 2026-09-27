@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header class="app-navbar" th:fragment="navbar">
+  <div class="navbar-container">
+    <a class="navbar-brand" th:href="@{/login}">
+      <div class="brand-icon">
+        <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+             stroke-width="2.2" viewBox="0 0 24 24" width="18">
+          <rect height="11" rx="2" ry="2" width="18" x="3" y="11"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+      </div>
+      <span class="brand-name">Auth Server</span>
+    </a>
+
+    <div class="navbar-actions">
+      <!-- Theme Toggle Button -->
+      <button aria-label="Toggle dark/light mode" class="theme-toggle-btn" id="themeToggleBtn" title="Toggle theme"
+              type="button">
+        <!-- Sun Icon (shown in dark mode to switch to light) -->
+        <svg class="theme-icon-sun" fill="none" height="18" stroke="currentColor" stroke-linecap="round"
+             stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" x2="12" y1="1" y2="3"></line>
+          <line x1="12" x2="12" y1="21" y2="23"></line>
+          <line x1="4.22" x2="5.64" y1="4.22" y2="5.64"></line>
+          <line x1="18.36" x2="19.78" y1="18.36" y2="19.78"></line>
+          <line x1="1" x2="3" y1="12" y2="12"></line>
+          <line x1="21" x2="23" y1="12" y2="12"></line>
+          <line x1="4.22" x2="5.64" y1="19.78" y2="18.36"></line>
+          <line x1="18.36" x2="19.78" y1="5.64" y2="4.22"></line>
+        </svg>
+        <!-- Moon Icon (shown in light mode to switch to dark) -->
+        <svg class="theme-icon-moon" fill="none" height="18" stroke="currentColor" stroke-linecap="round"
+             stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+
+      <!-- Optional Nav links when logged in -->
+      <th:block th:if="${username != null and username != 'Anonymous'}">
+        <span class="navbar-user-chip"
+              th:text="${displayName != null and !displayName.isBlank() ? displayName : username}">user@example.com</span>
+        <form class="navbar-logout-form" method="post" th:action="@{/logout}">
+          <button class="btn btn-outline-sm" type="submit">Sign Out</button>
+        </form>
+      </th:block>
+    </div>
+  </div>
+</header>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="alerts-container" th:fragment="alerts">
+  <!-- Error Alert -->
+  <div class="alert alert-error" role="alert" th:if="${param.error != null}">
+    <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" x2="12" y1="8" y2="12"></line>
+      <line x1="12" x2="12.01" y1="16" y2="16"></line>
+    </svg>
+    <span th:if="${param.error[0] == 'missing_email'}">OAuth provider did not provide an email address.</span>
+    <span th:if="${param.error[0] == 'invalid_password'}">Current password is incorrect.</span>
+    <span th:if="${param.error[0] == 'password_mismatch'}">Passwords do not match.</span>
+    <span th:if="${param.error[0] == 'user_exists'}">An account with this email already exists.</span>
+    <span th:if="${param.error[0] == 'cannot_unlink'}">Cannot unlink OAuth: this is your only login method.</span>
+    <span th:if="${param.error[0] == 'true' or param.error[0] == ''}">Invalid credentials or request failed.</span>
+  </div>
+
+  <!-- Registered Alert -->
+  <div class="alert alert-success" role="status" th:if="${param.registered != null}">
+    <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span>Account created successfully! Please sign in.</span>
+  </div>
+
+  <!-- Logout Alert -->
+  <div class="alert alert-success" role="status" th:if="${param.logout != null}">
+    <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span>You have been signed out.</span>
+  </div>
+
+  <!-- Updated Status Alert -->
+  <div class="alert alert-success" role="status" th:if="${param.updated != null}">
+    <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span th:if="${param.updated[0] == 'name'}">Profile name updated successfully.</span>
+    <span th:if="${param.updated[0] == 'password'}">Password changed successfully.</span>
+    <span th:if="${param.updated[0] == 'avatar'}">Avatar updated successfully.</span>
+    <span th:if="${param.updated[0] == 'oauth'}">OAuth login method unlinked.</span>
+    <span th:if="${param.updated[0] == 'passkey_added'}">Passkey added successfully.</span>
+    <span th:if="${param.updated[0] == 'passkey_removed'}">Passkey removed.</span>
+    <span
+        th:if="${param.updated[0] != 'name' and param.updated[0] != 'password' and param.updated[0] != 'avatar' and param.updated[0] != 'oauth' and param.updated[0] != 'passkey_added' and param.updated[0] != 'passkey_removed'}">Settings updated successfully.</span>
+  </div>
+</div>
+</body>
+</html>

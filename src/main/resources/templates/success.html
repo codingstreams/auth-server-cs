@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('User Profile & Security')}"></head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="page-wrapper profile-page-wrapper">
+  <div class="profile-container">
+    <!-- Top Profile Summary & Avatar Header Fragment -->
+    <div th:replace="~{fragments/profile/profile-header :: profile-header}"></div>
+
+    <!-- Global Alert Notifications Fragment -->
+    <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+    <!-- Navigation Tabs / Sections for Profile Management -->
+    <nav aria-label="Profile navigation" class="profile-nav-tabs">
+      <button class="nav-tab-btn active" data-tab="tab-general" type="button">General</button>
+      <button class="nav-tab-btn" data-tab="tab-security" type="button">Password</button>
+      <button class="nav-tab-btn" data-tab="tab-oauth" type="button">Connected Accounts</button>
+      <button class="nav-tab-btn" data-tab="tab-passkeys" type="button">Passkeys</button>
+    </nav>
+
+    <!-- Tab 1: General Info & Avatar -->
+    <div class="tab-pane active" id="tab-general">
+      <div th:replace="~{fragments/profile/profile-info :: profile-info}"></div>
+    </div>
+
+    <!-- Tab 2: Password & Credentials -->
+    <div class="tab-pane" id="tab-security">
+      <div th:replace="~{fragments/profile/security-password :: security-password}"></div>
+    </div>
+
+    <!-- Tab 3: Connected OAuth Methods -->
+    <div class="tab-pane" id="tab-oauth">
+      <div th:replace="~{fragments/profile/oauth-methods :: oauth-methods}"></div>
+    </div>
+
+    <!-- Tab 4: Passkeys -->
+    <div class="tab-pane" id="tab-passkeys">
+      <div th:replace="~{fragments/profile/passkeys :: passkeys}"></div>
+    </div>
+  </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script defer src="/js/passkey-register.js" th:src="@{/js/passkey-register.js}"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+pom.xml
+certs/*.pem
+certs/*.key
+Dockerfile
+.env*
+application.yaml

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="settings-card" th:fragment="profile-info">
+  <div class="settings-card-header">
+    <div class="card-header-icon">
+      <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+           viewBox="0 0 24 24" width="18">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+    </div>
+    <div>
+      <h2 class="settings-card-title">Personal Information</h2>
+      <p class="settings-card-desc">Update your display name and public profile details.</p>
+    </div>
+  </div>
+
+  <!-- Update Display Name Form -->
+  <form class="settings-form" method="post" th:action="@{/profile/update-name}">
+    <input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
+
+    <div class="form-group">
+      <label for="displayNameInput">Display Name</label>
+      <div class="input-inline-group">
+        <div class="input-wrapper">
+          <input autocomplete="name" id="displayNameInput" name="displayName" placeholder="Enter your full name"
+                 required th:value="${displayName}" type="text">
+        </div>
+        <button class="btn btn-secondary" type="submit">Save Name</button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Primary Email (Login Identifier)</label>
+      <div class="input-wrapper">
+        <input disabled readonly th:value="${username}" type="email">
+        <span class="input-hint">Your email address is managed through your authentication provider.</span>
+      </div>
+    </div>
+  </form>
+
+  <!-- Change Avatar Dialog/Section -->
+  <div class="avatar-change-section">
+    <label>Profile Avatar</label>
+    <form class="avatar-form" method="post" th:action="@{/profile/avatar}">
+      <input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
+      <div class="input-inline-group">
+        <div class="input-wrapper">
+          <input id="avatarUrlInput" name="avatarUrl" placeholder="https://example.com/avatar.png"
+                 th:value="${avatarUrl}" type="url">
+        </div>
+        <button class="btn btn-secondary" type="submit">Update Avatar</button>
+      </div>
+      <div class="avatar-presets">
+        <span class="avatar-presets-label">Or choose a preset:</span>
+        <div class="preset-buttons">
+          <button class="preset-btn"
+                  onclick="selectPresetAvatar('https://api.dicebear.com/10.x/adventurer-neutral/svg?seed=Adventurer')"
+                  type="button">🧭 Adventurer
+          </button>
+          <button class="preset-btn"
+                  onclick="selectPresetAvatar('https://api.dicebear.com/10.x/bottts/svg?seed=Shadow')" type="button">🤖
+            Bot
+          </button>
+          <button class="preset-btn"
+                  onclick="selectPresetAvatar('https://api.dicebear.com/10.x/avataaars/svg?seed=Felix')" type="button">
+            🧑 Felix
+          </button>
+          <button class="preset-btn" onclick="selectPresetAvatar('')" type="button">🔄 Reset</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

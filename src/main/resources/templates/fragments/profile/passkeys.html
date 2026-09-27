@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="settings-card" th:fragment="passkeys">
+  <div class="settings-card-header">
+    <div class="card-header-icon">
+      <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+           viewBox="0 0 24 24" width="18">
+        <path
+            d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3H9z"></path>
+      </svg>
+    </div>
+    <div>
+      <h2 class="settings-card-title">Passkeys & FIDO2 Credentials</h2>
+      <p class="settings-card-desc">Sign in securely using biometrics, Touch ID, Windows Hello, or hardware security
+        keys.</p>
+    </div>
+  </div>
+
+  <!-- Passkeys List -->
+  <div class="passkey-list">
+    <!-- Render registered passkeys if present -->
+    <th:block th:if="${passkeys != null and !passkeys.isEmpty()}">
+      <div class="passkey-item" th:each="pk : ${passkeys}">
+        <div class="passkey-left">
+          <div class="passkey-icon">
+            <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="18">
+              <path
+                  d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3H9z"></path>
+            </svg>
+          </div>
+          <div>
+            <div class="passkey-name-row">
+              <strong th:text="${pk.name != null ? pk.name : 'Hardware Passkey'}">My Device</strong>
+              <span class="badge badge-success">Verified</span>
+            </div>
+            <span class="passkey-meta" th:text="'Added on ' + (${pk.createdAt != null ? pk.createdAt : 'Recent'})">Added recently</span>
+          </div>
+        </div>
+
+        <form method="post" th:action="@{/profile/passkeys/remove}">
+          <input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
+          <input name="passkeyId" th:value="${pk.id != null ? pk.id : pk.name}" type="hidden"/>
+          <button class="btn btn-outline-danger" type="submit">Remove</button>
+        </form>
+      </div>
+    </th:block>
+
+    <!-- Empty state when no passkeys -->
+    <div class="empty-state" th:if="${passkeys == null or passkeys.isEmpty()}">
+      <svg fill="none" height="32" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" width="32">
+        <path
+            d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3H9z"></path>
+      </svg>
+      <p>No passkeys registered yet. Register a passkey to sign in without typing your password.</p>
+    </div>
+  </div>
+
+  <!-- Add Passkey Section / Trigger -->
+  <div class="add-passkey-box">
+    <form class="add-passkey-form" method="post" th:action="@{/profile/passkeys/add}">
+      <input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
+      <div class="input-inline-group">
+        <div class="input-wrapper">
+          <input id="passkeyNameInput" name="passkeyName" placeholder="e.g. MacBook Touch ID, YubiKey 5" required
+                 type="text">
+        </div>
+        <button class="btn btn-primary" id="registerPasskeyBtn" type="submit">
+          <svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15">
+            <line x1="12" x2="12" y1="5" y2="19"></line>
+            <line x1="5" x2="19" y1="12" y2="12"></line>
+          </svg>
+          <span>Add Passkey</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

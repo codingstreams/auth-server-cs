@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: auth-server
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+    hikari:
+      pool-name: development-pool
+      maximum-pool-size: 5
+      minimum-idle: 3
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      data-source-properties:
+        prepareThreshold: 0
+        preparedStatementCacheQueries: 0
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 0
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${CLIENT_ID_GITHUB}
+            client-secret: ${CLIENT_SECRET_GITHUB}
+            scope: read:user, user:email
+          google:
+            client-id: ${CLIENT_ID_GOOGLE}
+            client-secret: ${CLIENT_SECRET_GOOGLE}
+            scope: openid, profile, email
+
+redis:
+  uri: ${REDIS_URI}
+
+server:
+  port: 9090
+
+app:
+  social-login:
+    google-url: ${SOCIAL_LOGIN_GOOGLE_URL:http://localhost:8080/login/oauth2/code/google}
+    github-url: ${SOCIAL_LOGIN_GITHUB_URL:http://localhost:8080/login/oauth2/code/github}
+  oauth2:
+    client:
+      redirect-uri: ${OAUTH2_CLIENT_REDIRECT_URI:http://localhost:3000/oauth2/code/my-web-client}
+      post-logout-redirect-uri: ${OAUTH2_CLIENT_POST_LOGOUT_REDIRECT_URI:http://localhost:3000}
+
+  mailtrap:
+    token: ${MAILTRAP_TOKEN}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="settings-card" th:fragment="session-actions">
+  <div class="settings-card-header">
+    <div class="card-header-icon">
+      <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+           viewBox="0 0 24 24" width="18">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+    </div>
+    <div>
+      <h2 class="settings-card-title">Session & Access Control</h2>
+      <p class="settings-card-desc">Review your granted permissions or end your current session.</p>
+    </div>
+  </div>
+
+  <div class="detail-row">
+    <span class="detail-label">Granted Authorities:</span>
+    <div class="authorities-list">
+      <span class="badge badge-role" th:each="auth : ${authorities}" th:text="${auth.authority}">ROLE_USER</span>
+      <span class="text-muted"
+            th:if="${authorities == null or #lists.isEmpty(authorities)}">Standard User Permissions</span>
+    </div>
+  </div>
+
+  <div class="session-footer-actions">
+    <form class="logout-form" method="post" th:action="@{/logout}">
+      <input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
+      <button class="btn btn-danger" type="submit">
+        <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+             stroke-width="2" viewBox="0 0 24 24" width="16">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" x2="9" y1="12" y2="12"></line>
+        </svg>
+        <span>Sign Out Everywhere</span>
+      </button>
+    </form>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,5 @@
+Write a JUnit 5 / AssertJ unit test for the provided class.
+Requirements:
+- Mock dependencies with Mockito.
+- Cover the happy path and two edge cases (invalid input, null check).
+- Do not create any test database unless requested.

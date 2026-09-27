@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<section class="profile-header-card" th:fragment="profile-header">
+  <div class="profile-avatar-wrapper">
+    <div class="profile-avatar" id="avatarDisplay">
+      <img alt="User Avatar" class="avatar-image" id="avatarImg" th:if="${avatarUrl != null and !avatarUrl.isBlank()}"
+           th:src="${avatarUrl}"/>
+      <span class="avatar-initials" id="avatarInitials" th:if="${avatarUrl == null or avatarUrl.isBlank()}"
+            th:text="${displayName != null and !displayName.isBlank() ? #strings.substring(displayName, 0, 1).toUpperCase() : (username != null ? #strings.substring(username, 0, 1).toUpperCase() : 'U')}">U</span>
+    </div>
+    <button aria-label="Change profile avatar" class="avatar-edit-badge" id="openAvatarModalBtn" title="Change Avatar"
+            type="button">
+      <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+           viewBox="0 0 24 24" width="14">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+        <circle cx="12" cy="13" r="4"></circle>
+      </svg>
+    </button>
+  </div>
+
+  <div class="profile-summary">
+    <div class="profile-title-row">
+      <h1 class="profile-name" th:text="${displayName != null and !displayName.isBlank() ? displayName : username}">John
+        Doe</h1>
+      <span class="status-badge status-active">
+                <span class="status-dot"></span> Active
+            </span>
+    </div>
+    <p class="profile-email" th:text="${username}">user@example.com</p>
+    <div class="profile-badges-row">
+      <span class="badge badge-provider" th:if="${provider != null}" th:text="'Provider: ' + ${provider}">Provider: LOCAL</span>
+      <span class="badge badge-role" th:each="auth : ${authorities}" th:text="${auth.authority}">ROLE_USER</span>
+    </div>
+  </div>
+</section>
+</body>
+</html>
