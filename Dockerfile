@@ -21,7 +21,7 @@ RUN ./mvnw clean package -DskipTests -B
 # ==========================================
 # Stage 2: Minimal Distroless/Chiseled Runtime
 # ==========================================
-FROM eclipse-temurin:25-jdk-chiseled
+FROM eclipse-temurin:25-jdk-alpine
 
 WORKDIR /app
 
