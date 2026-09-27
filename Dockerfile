@@ -28,6 +28,7 @@ WORKDIR /app
 # Copy the built jar artifact from builder stage
 COPY --from=builder /build/target/*.jar app.jar
 
+ENV PORT=8080
 EXPOSE 8080
 
 # Exec format entrypoint for chiseled container
