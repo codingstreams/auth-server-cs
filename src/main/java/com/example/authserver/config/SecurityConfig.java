@@ -78,7 +78,7 @@ public class SecurityConfig {
     http
         .csrf(CsrfConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/avatar/**", "/login", "/register", "/css/**", "/js/**", "/favicon.ico").permitAll()
+            .requestMatchers("/avatar/**", "/login/**", "/register", "/css/**", "/js/**", "/favicon.ico", "/oauth2/**").permitAll()
             .anyRequest().authenticated()
         )
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
@@ -99,6 +99,7 @@ public class SecurityConfig {
             .loginPage("/login")
             .userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService))
             .successHandler(oAuth2SuccessHandler)
+            .failureUrl("/login?error=oauth")
         ).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();

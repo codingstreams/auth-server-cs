@@ -50,8 +50,8 @@ server:
 
 app:
   social-login:
-    google-url: ${SOCIAL_LOGIN_GOOGLE_URL:http://localhost:8080/login/oauth2/code/google}
-    github-url: ${SOCIAL_LOGIN_GITHUB_URL:http://localhost:8080/login/oauth2/code/github}
+    google-url: ${SOCIAL_LOGIN_GOOGLE_URL:/oauth2/authorization/google}
+    github-url: ${SOCIAL_LOGIN_GITHUB_URL:/oauth2/authorization/github}
   oauth2:
     client:
       redirect-uri: ${OAUTH2_CLIENT_REDIRECT_URI:http://localhost:3000/oauth2/code/my-web-client}
@@ -60,12 +60,14 @@ app:
   mailtrap:
     token: ${MAILTRAP_TOKEN}
 
-  webauthn:
-    rp-id: ${WEBAUTHN_RP_ID}
-    origin: ${WEBAUTHN_ORIGIN}
+#  webauthn:
+#    rp-id: ${WEBAUTHN_RP_ID}
+#    origin: ${WEBAUTHN_ORIGIN}
 
 
-security:
-  jwt:
-    private-key-path: ${PRIVATE_KEY_PATH}
-    public-key-path: ${PUBLIC_KEY_PATH}
+#security:
+#  jwt:
+#    private-key-path: ${PRIVATE_KEY_PATH}
+#    public-key-path: ${PUBLIC_KEY_PATH}
+
+debug: false

@@ -70,7 +70,7 @@
           </button>
         </form>
         <!-- If not linked: Connect Button -->
-        <a class="btn btn-secondary" href="http://localhost:8080/login/oauth2/code/google"
+        <a class="btn btn-secondary" href="/oauth2/authorization/google"
            th:href="${googleLoginUrl}" th:unless="${googleLinked}">
           Connect
         </a>
@@ -109,7 +109,7 @@
           </button>
         </form>
         <!-- If not linked: Connect Button -->
-        <a class="btn btn-secondary" href="http://localhost:8080/login/oauth2/code/github"
+        <a class="btn btn-secondary" href="/oauth2/authorization/github"
            th:href="${githubLoginUrl}" th:unless="${githubLinked}">
           Connect
         </a>

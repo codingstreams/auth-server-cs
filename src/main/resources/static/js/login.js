@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 3. Tab Switching on Profile Page (success.html)
+  // 3. Tab Switching on Profile Page (dashboard.html)
   const tabButtons = document.querySelectorAll('.profile-nav-tabs .nav-tab-btn');
   const tabPanes = document.querySelectorAll('.tab-pane');
 

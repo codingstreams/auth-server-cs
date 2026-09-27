@@ -44,10 +44,10 @@ public class AuthViewController {
   private final AuthService authService;
   private final PasswordEncoder passwordEncoder;
 
-  @Value("${app.social-login.google-url:http://localhost:8080/login/oauth2/code/google}")
+  @Value("${app.social-login.google-url:/oauth2/authorization/google}")
   private String googleLoginUrl;
 
-  @Value("${app.social-login.github-url:http://localhost:8080/login/oauth2/code/github}")
+  @Value("${app.social-login.github-url:/oauth2/authorization/github}")
   private String githubLoginUrl;
 
   private final Map<String, UserProfileState> profileStateMap = new ConcurrentHashMap<>();
