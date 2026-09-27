@@ -28,5 +28,7 @@ WORKDIR /app
 # Copy the built jar artifact from builder stage
 COPY --from=builder /build/target/*.jar app.jar
 
+EXPOSE 8080
+
 # Exec format entrypoint for chiseled container
 ENTRYPOINT ["java", "-jar", "app.jar"]
