@@ -39,8 +39,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
   private final RedisTokenService redisTokenService;
   private final AppUserRepository appUserRepository;
 
-  @Value("${security.oauth2.redirect-uri:/success}")
-  private String targetUrl = "/success";
+  @Value("${security.oauth2.redirect-uri:/dashboard}")
+  private String targetUrl = "/dashboard";
 
   private static @Nullable String getEmail(Authentication authentication) {
     if (!(authentication.getPrincipal() instanceof OAuth2User oAuth2User)) {

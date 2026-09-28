@@ -68,6 +68,12 @@ public class AuthViewController {
     return "login";
   }
 
+  @GetMapping("/")
+  public String index() {
+    log.debug("Rendering index view template");
+    return "redirect:/dashboard";
+  }
+
   @GetMapping("/register")
   public String register(Model model) {
     log.debug("Rendering register view template");
