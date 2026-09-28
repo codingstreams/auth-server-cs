@@ -60,14 +60,14 @@ app:
   mailtrap:
     token: ${MAILTRAP_TOKEN}
 
-#  webauthn:
-#    rp-id: ${WEBAUTHN_RP_ID}
-#    origin: ${WEBAUTHN_ORIGIN}
+  webauthn:
+    rp-id: ${WEBAUTHN_RP_ID}
+    origin: ${WEBAUTHN_ORIGIN}
 
 
-#security:
-#  jwt:
-#    private-key-path: ${PRIVATE_KEY_PATH}
-#    public-key-path: ${PUBLIC_KEY_PATH}
+security:
+  jwt:
+    private-key-path: ${PRIVATE_KEY_PATH}
+    public-key-path: ${PUBLIC_KEY_PATH}
 
 debug: false
