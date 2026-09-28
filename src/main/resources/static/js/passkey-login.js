@@ -128,7 +128,7 @@ async function handlePasskeyLogin() {
     }
 
     // 6. Successful login -> redirect to dashboard
-    window.location.href = "/success";
+    window.location.href = "/dashboard";
 
   } catch (err) {
     if (err.name === "NotAllowedError") {
