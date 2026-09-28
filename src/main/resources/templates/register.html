@@ -19,27 +19,6 @@
       <section class="auth-column left-column">
         <h2 class="column-title">Account Details</h2>
         <form class="auth-form" id="registerForm" method="post" th:action="@{/register}">
-          <!-- Default Profile Avatar Preview & Randomizer -->
-          <div class="register-avatar-container">
-            <div class="register-avatar-preview">
-              <img alt="Default Avatar" class="register-avatar-img" id="registerAvatarImg"
-                   src="https://api.dicebear.com/10.x/adventurer-neutral/svg?seed=default"
-                   th:src="${avatarUrl != null ? avatarUrl : 'https://api.dicebear.com/10.x/adventurer-neutral/svg?seed=' + avatarSeed}"/>
-            </div>
-            <div class="register-avatar-info">
-              <span class="register-avatar-label">Your Default Avatar</span>
-              <input id="avatarSeedInput" name="avatarSeed" th:value="${avatarSeed}" type="hidden"/>
-              <button class="btn btn-outline-sm btn-randomize-avatar" id="randomizeAvatarBtn"
-                      title="Generate another avatar" type="button">
-                <svg fill="none" height="13" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                     stroke-width="2" viewBox="0 0 24 24" width="13">
-                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
-                </svg>
-                <span>Randomize</span>
-              </button>
-            </div>
-          </div>
-
           <!-- Full Name Field -->
           <div class="form-group">
             <div class="input-wrapper floating-input-wrapper">

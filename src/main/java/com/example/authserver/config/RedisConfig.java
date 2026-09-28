@@ -10,6 +10,7 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
@@ -55,5 +56,16 @@ public class RedisConfig {
 
     log.info("RedisCacheManager successfully configured");
     return cacheManager;
+  }
+
+  @Bean
+  public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+    final var template = new RedisTemplate<String, Object>();
+    template.setConnectionFactory(connectionFactory);
+    template.setKeySerializer(RedisSerializer.string());
+    template.setValueSerializer(RedisSerializer.json());
+    template.afterPropertiesSet();
+
+    return template;
   }
 }

@@ -111,8 +111,8 @@ public class AuthViewController {
     }
   }
 
-  @GetMapping("/success")
-  public String success(@AuthenticationPrincipal UserDetails userDetails,
+  @GetMapping("/dashboard")
+  public String dashboard(@AuthenticationPrincipal UserDetails userDetails,
                         Authentication authentication,
                         Model model) {
     final String username = extractUsername(authentication, userDetails);
@@ -187,7 +187,7 @@ public class AuthViewController {
     final List<com.example.authserver.model.UserPasskey> dbPasskeys = userPasskeyRepository.findAllByUser_Username(username);
     model.addAttribute("passkeys", dbPasskeys);
 
-    return "success";
+    return "dashboard";
   }
 
   @PostMapping("/profile/avatar")
@@ -200,7 +200,7 @@ public class AuthViewController {
     final UserProfileState profileState = getOrCreateProfileState(username);
     profileState.setAvatarUrl(avatarUrl != null && !avatarUrl.isBlank() ? avatarUrl.trim() : null);
 
-    return "redirect:/success?updated=avatar#tab-general";
+    return "redirect:/dashboard?updated=avatar#tab-general";
   }
 
   @PostMapping("/profile/change-password")
@@ -214,7 +214,7 @@ public class AuthViewController {
 
     if (!newPassword.equals(confirmNewPassword)) {
       log.warn("Password change rejected: new passwords do not match for user: {}", username);
-      return "redirect:/success?error=password_mismatch#tab-security";
+      return "redirect:/dashboard?error=password_mismatch#tab-security";
     }
 
     final Optional<AppUser> userOpt = appUserRepository.findByUsername(username);
@@ -229,7 +229,7 @@ public class AuthViewController {
     if (hasExistingPassword) {
       if (currentPassword == null || !passwordEncoder.matches(currentPassword, user.getPasswordHash())) {
         log.warn("Password change failed: current password incorrect for user: {}", username);
-        return "redirect:/success?error=invalid_password#tab-security";
+        return "redirect:/dashboard?error=invalid_password#tab-security";
       }
     }
 
@@ -237,7 +237,7 @@ public class AuthViewController {
     appUserRepository.save(user);
     log.info("Password successfully updated in database for user: {}", username);
 
-    return "redirect:/success?updated=password#tab-security";
+    return "redirect:/dashboard?updated=password#tab-security";
   }
 
   @PostMapping("/profile/oauth/unlink")
@@ -258,7 +258,7 @@ public class AuthViewController {
     // Prevent lockout if OAuth is the only login method
     if (!hasPassword) {
       log.warn("OAuth unlink rejected: user {} has no local password", username);
-      return "redirect:/success?error=cannot_unlink#tab-oauth";
+      return "redirect:/dashboard?error=cannot_unlink#tab-oauth";
     }
 
     user.setProvider(AuthProvider.LOCAL);
@@ -266,7 +266,7 @@ public class AuthViewController {
     appUserRepository.save(user);
     log.info("Successfully unlinked OAuth provider for user: {}", username);
 
-    return "redirect:/success?updated=oauth#tab-oauth";
+    return "redirect:/dashboard?updated=oauth#tab-oauth";
   }
 
   @PostMapping("/profile/passkeys/add")
@@ -281,7 +281,7 @@ public class AuthViewController {
     final String dateStr = DateTimeFormatter.ofPattern("MMM dd, yyyy").format(LocalDate.now());
 
     profileState.getPasskeys().add(new PasskeyDto(id, passkeyName.trim(), dateStr));
-    return "redirect:/success?updated=passkey_added#tab-passkeys";
+    return "redirect:/dashboard?updated=passkey_added#tab-passkeys";
   }
 
   @PostMapping("/profile/passkeys/remove")
@@ -302,7 +302,7 @@ public class AuthViewController {
     final UserProfileState profileState = getOrCreateProfileState(username);
     profileState.getPasskeys().removeIf(pk -> pk.id().equals(passkeyId));
 
-    return "redirect:/success?updated=passkey_removed#tab-passkeys";
+    return "redirect:/dashboard?updated=passkey_removed#tab-passkeys";
   }
 
   private String extractUsername(Authentication authentication, UserDetails userDetails) {

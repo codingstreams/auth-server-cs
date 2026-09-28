@@ -163,39 +163,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   setupFormSpinner('loginForm', 'loginBtn', 'Signing In...');
   setupFormSpinner('registerForm', 'registerBtn', 'Creating Account...');
-
-
-
-  // 8. Default Avatar in Register Page
-  const randomizeAvatarBtn = document.getElementById('randomizeAvatarBtn');
-  const registerAvatarImg = document.getElementById('registerAvatarImg');
-  const avatarSeedInput = document.getElementById('avatarSeedInput');
-
-  async function fetchDefaultAvatar() {
-    try {
-      if (randomizeAvatarBtn) randomizeAvatarBtn.disabled = true;
-      const response = await fetch('/api/avatar/default');
-      if (response.ok) {
-        const data = await response.json();
-        if (registerAvatarImg) registerAvatarImg.src = data.url;
-        if (avatarSeedInput) avatarSeedInput.value = data.seed;
-      }
-    } catch (e) {
-      console.warn('Could not fetch default avatar from server, using fallback', e);
-      const fallbackSeed = crypto.randomUUID ? crypto.randomUUID() : ('seed_' + Math.random().toString(36).substring(2, 11));
-      const fallbackUrl = 'https://api.dicebear.com/10.x/identicon/svg?seed=' + fallbackSeed;
-      if (registerAvatarImg) registerAvatarImg.src = fallbackUrl;
-      if (avatarSeedInput) avatarSeedInput.value = fallbackSeed;
-    } finally {
-      if (randomizeAvatarBtn) randomizeAvatarBtn.disabled = false;
-    }
-  }
-
-  window.loadDefaultAvatar = fetchDefaultAvatar;
-
-  if (randomizeAvatarBtn) {
-    randomizeAvatarBtn.addEventListener('click', fetchDefaultAvatar);
-  }
 });
 
 /**
