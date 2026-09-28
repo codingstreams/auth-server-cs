@@ -21,7 +21,7 @@ public class DashboardViewController {
     final var response = appUserService.updateUserProfile(UpdateUserProfileRequest.updateName(displayName));
     log.info("Updated display name successfully to: {}", response.fullName());
 
-    return "redirect:/success?updated=name#tab-general";
+    return "redirect:/dashboard?updated=name#tab-general";
   }
 }
 

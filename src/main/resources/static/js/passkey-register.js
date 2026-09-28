@@ -142,8 +142,8 @@ async function handlePasskeyRegistration() {
       throw new Error(errorData?.message || "Failed to finish passkey registration on server.");
     }
 
-    // Success: refresh to show new passkey in profile table
-    window.location.href = "/success?updated=passkey_added#tab-passkeys";
+    // dashboard: refresh to show new passkey in profile table
+    window.location.href = "/dashboard?updated=passkey_added#tab-passkeys";
 
   } catch (err) {
     if (err.name === "NotAllowedError") {
