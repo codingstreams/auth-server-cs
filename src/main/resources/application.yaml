@@ -61,13 +61,13 @@ app:
     token: ${MAILTRAP_TOKEN}
 
   webauthn:
-    rp-id: ${WEBAUTHN_RP_ID}
-    origin: ${WEBAUTHN_ORIGIN}
+    rp-id: ${WEBAUTHN_RP_ID:localhost}
+    origin: ${WEBAUTHN_ORIGIN:'http://localhost:8080'}
 
 
 security:
   jwt:
-    private-key-path: ${PRIVATE_KEY_PATH}
-    public-key-path: ${PUBLIC_KEY_PATH}
+    private-key-path: ${PRIVATE_KEY_PATH:certs/private.pem}
+    public-key-path: ${PUBLIC_KEY_PATH:certs/public.pem}
 
 debug: false

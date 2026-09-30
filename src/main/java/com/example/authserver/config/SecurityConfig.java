@@ -87,7 +87,7 @@ public class SecurityConfig {
     http
         .csrf(CsrfConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/avatar/**", "/login/**", "/register", "/css/**", "/js/**", "/favicon.ico", "/oauth2/**").permitAll()
+            .requestMatchers("/avatar/**", "/login/**", "/register", "/css/**", "/js/**", "/assets/**","/favicon.ico", "/oauth2/**").permitAll()
             .anyRequest().authenticated()
         )
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))

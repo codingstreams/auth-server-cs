@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
-@Controller
+//@Controller
 @RequiredArgsConstructor
 public class FaviconController {
 
-  @GetMapping("/favicon.ico")
-  @ResponseBody
-  public ResponseEntity<Void> getFavicon() {
-    log.trace("Favicon requested, returning 204 No Content");
-    return ResponseEntity.noContent().build();
-  }
+//  @GetMapping("/favicon.ico")
+//  @ResponseBody
+//  public ResponseEntity<Void> getFavicon() {
+//    log.trace("Favicon requested, returning 204 No Content");
+//    return ResponseEntity.noContent().build();
+//  }
 }
