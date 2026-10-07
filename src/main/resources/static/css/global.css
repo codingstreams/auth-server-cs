@@ -12,7 +12,7 @@
     --border-focus: #0f172a;
     --text-primary: #0f172a;
     --text-secondary: #475569;
-    --text-muted: #94a3b8;
+    --text-muted: #64748b;
     --primary: #0f172a;
     --primary-hover: #1e293b;
     --primary-fg: #ffffff;
@@ -50,7 +50,7 @@ html.dark {
     --border-focus: #71717a;
     --text-primary: #f4f4f5;
     --text-secondary: #a1a1aa;
-    --text-muted: #71717a;
+    --text-muted: #a1a1aa;
     --primary: #f4f4f5;
     --primary-hover: #e4e4e7;
     --primary-fg: #09090b;
@@ -439,6 +439,7 @@ input[readonly] {
 }
 
 .toggle-password-btn {
+    min-width: 44px;
     position: absolute;
     right: 0.35rem;
     background: none;
@@ -446,7 +447,7 @@ input[readonly] {
     color: var(--text-muted);
     cursor: pointer;
     min-width: 36px;
-    min-height: 36px;
+    min-height: 44px;
     padding: 0.4rem;
     display: flex;
     align-items: center;
@@ -471,7 +472,7 @@ input[readonly] {
 .floating-input-wrapper input {
     height: 100% !important;
     width: 100% !important;
-    padding: 20px 2.6rem 5px 2.5rem !important;
+    padding: 23px 3.5rem 3px 2.5rem !important;
     font-size: 1rem !important;
     line-height: 1.2 !important;
     background-color: var(--bg-input);
@@ -504,7 +505,7 @@ input[readonly] {
     left: 2.5rem;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 0.925rem;
+    font-size: 0.875rem;
     color: var(--text-muted);
     pointer-events: none;
     transition: all 0.16s cubic-bezier(0.4, 0, 0.2, 1);
@@ -517,9 +518,9 @@ input[readonly] {
 .floating-input-wrapper input:not(:placeholder-shown) ~ .floating-label,
 .floating-input-wrapper input.has-value ~ .floating-label,
 .floating-input-wrapper input:-webkit-autofill ~ .floating-label {
-    top: 8px;
+    top: 5px;
     transform: translateY(0);
-    font-size: 0.7rem;
+    font-size: 0.875rem;
     font-weight: 500;
     color: var(--text-secondary);
     letter-spacing: 0.02em;
@@ -532,7 +533,7 @@ input[readonly] {
 
 .floating-input-wrapper .toggle-password-btn {
     position: absolute;
-    right: 0.65rem;
+    right: 0.25rem;
     top: 50%;
     transform: translateY(-50%);
     z-index: 2;
@@ -596,7 +597,7 @@ input[readonly] {
     user-select: none;
     color: var(--text-secondary);
     transition: color var(--transition);
-    min-height: 36px;
+    min-height: 44px;
     padding: 0.25rem 0;
 }
 
@@ -666,7 +667,7 @@ input[readonly] {
 }
 
 .btn-outline-sm {
-    height: 30px;
+    height: 44px;
     padding: 0 0.65rem;
     font-size: 0.775rem;
     background: none;
@@ -960,8 +961,8 @@ input[readonly] {
     position: absolute;
     bottom: -2px;
     right: -2px;
-    width: 28px;
-    height: 28px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     background-color: var(--primary);
     color: var(--primary-fg);
@@ -973,14 +974,6 @@ input[readonly] {
     transition: var(--transition);
 }
 
-.avatar-edit-badge::after {
-    content: '';
-    position: absolute;
-    top: -6px;
-    bottom: -6px;
-    left: -6px;
-    right: -6px;
-}
 
 .avatar-edit-badge:hover {
     transform: scale(1.08);
@@ -1038,6 +1031,10 @@ input[readonly] {
 }
 
 .nav-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    text-decoration: none;
     background: none;
     border: none;
     padding: 0.6rem 0.9rem;
@@ -1166,11 +1163,13 @@ input[readonly] {
 }
 
 .preset-buttons {
+    flex-wrap: wrap;
     display: flex;
     gap: 0.35rem;
 }
 
 .preset-btn {
+    min-height: 44px;
     background-color: var(--bg-elevated);
     border: 1px solid var(--border-color);
     color: var(--text-secondary);
@@ -1623,10 +1622,9 @@ input[readonly] {
         scroll-behavior: auto !important;
     }
 
-    /* Retain continuous rotation for the loading spinner so users still receive loading feedback */
+    /* Text labels retain loading feedback without continuous motion. */
     .btn-spinner {
-        animation-duration: 1.2s !important;
-        animation-iteration-count: infinite !important;
+        animation: none !important;
     }
 }
 
@@ -1646,3 +1644,11 @@ input[readonly] {
     font-size: 0.875rem;
 }
 .field-error { color: var(--danger-fg); font-size: 0.875rem; }
+
+.toggle-password-btn:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: -2px;
+}
+.tab-pane { scroll-margin-top: 5rem; }
+.btn-oauth { height: auto; min-height: 48px; padding: 0.75rem; }
+.btn-oauth svg { flex-shrink: 0; }

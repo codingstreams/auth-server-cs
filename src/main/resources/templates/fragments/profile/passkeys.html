@@ -4,7 +4,7 @@
 <div class="settings-card" th:fragment="passkeys">
   <div class="settings-card-header">
     <div class="card-header-icon">
-      <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+      <svg aria-hidden="true" focusable="false" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
            viewBox="0 0 24 24" width="18">
         <path
             d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3H9z"></path>
@@ -24,7 +24,7 @@
       <div class="passkey-item" th:each="pk : ${passkeys}">
         <div class="passkey-left">
           <div class="passkey-icon">
-            <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="18">
+            <svg aria-hidden="true" focusable="false" fill="none" height="18" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="18">
               <path
                   d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3H9z"></path>
             </svg>
@@ -66,7 +66,7 @@
                    type="text">
           </div>
           <button class="btn btn-primary" id="registerPasskeyBtn" type="submit">
-            <svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15">
+            <svg aria-hidden="true" focusable="false" fill="none" height="15" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15">
               <line x1="12" x2="12" y1="5" y2="19"></line>
               <line x1="5" x2="19" y1="12" y2="12"></line>
             </svg>

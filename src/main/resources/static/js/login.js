@@ -98,106 +98,76 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 3. Tab Switching on Profile Page (dashboard.html)
-  const tabList = document.querySelector('.profile-nav-tabs[role="tablist"]');
+  // Progressively enhance real section links only when every panel is present.
+  const tabList = document.querySelector('.profile-nav-tabs');
   const tabButtons = Array.from(document.querySelectorAll('.profile-nav-tabs .nav-tab-btn'));
   const tabPanes = Array.from(document.querySelectorAll('.tab-pane'));
+  const knownTabs = new Set(tabButtons.map(button => button.dataset.tab));
+  const canEnhance = tabList && tabButtons.length === 4 &&
+    tabButtons.every(button => tabPanes.some(pane => pane.id === button.dataset.tab));
 
-  function activateTab(tabId, focusTab = false) {
-    if (!tabButtons.length || !tabPanes.length) return;
-
-    // Fallback to General if tabId is empty or doesn't match an existing pane
-    let resolvedId = tabId;
-    if (!resolvedId || !document.getElementById(resolvedId)) {
-      resolvedId = 'tab-general';
-    }
-
-    let activeBtn = null;
-
-    tabButtons.forEach(btn => {
-      const isTarget = btn.getAttribute('data-tab') === resolvedId;
-      btn.classList.toggle('active', isTarget);
-      btn.setAttribute('aria-selected', isTarget ? 'true' : 'false');
-      btn.setAttribute('tabindex', isTarget ? '0' : '-1');
-
-      if (isTarget) {
-        activeBtn = btn;
-        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-        if (focusTab) {
-          btn.focus();
-        }
-      }
+  function activateTab(tabId, focusTab = false, updateHistory = false) {
+    if (!canEnhance) return;
+    const resolvedId = knownTabs.has(tabId) ? tabId : 'tab-general';
+    tabButtons.forEach(button => {
+      const selected = button.dataset.tab === resolvedId;
+      button.classList.toggle('active', selected);
+      button.setAttribute('aria-selected', String(selected));
+      button.tabIndex = selected ? 0 : -1;
+      if (selected && focusTab) { button.focus(); window.AuthUI.scroll(button); }
     });
-
     tabPanes.forEach(pane => {
-      const isTarget = pane.id === resolvedId;
-      pane.classList.toggle('active', isTarget);
-      if (isTarget) {
-        pane.removeAttribute('hidden');
-      } else {
-        pane.setAttribute('hidden', '');
-      }
+      const selected = pane.id === resolvedId;
+      pane.classList.toggle('active', selected);
+      pane.hidden = !selected;
     });
-
-    // Update URL hash without scroll jump
-    try {
-      history.replaceState(null, null, '#' + resolvedId);
-    } catch (e) {
+    const hash = '#' + resolvedId;
+    if (location.hash !== hash) {
+      history[updateHistory ? 'pushState' : 'replaceState'](null, '', hash);
     }
   }
-
-  tabButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const targetId = btn.getAttribute('data-tab');
-      activateTab(targetId, false);
+  if (canEnhance) {
+    tabList.setAttribute('role', 'tablist');
+    tabButtons.forEach(button => {
+      button.setAttribute('role', 'tab');
+      button.setAttribute('aria-controls', button.dataset.tab);
+      button.addEventListener('click', event => {
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        activateTab(button.dataset.tab, false, true);
+      });
     });
-  });
-
-  // Roving tab focus and keyboard navigation (Left/Right, Home/End)
-  if (tabList) {
-    tabList.addEventListener('keydown', (e) => {
-      const currentIndex = tabButtons.findIndex(btn => btn === document.activeElement);
-      if (currentIndex === -1) return;
-
-      let nextIndex = null;
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-        nextIndex = (currentIndex + 1) % tabButtons.length;
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        nextIndex = (currentIndex - 1 + tabButtons.length) % tabButtons.length;
-      } else if (e.key === 'Home') {
-        nextIndex = 0;
-      } else if (e.key === 'End') {
-        nextIndex = tabButtons.length - 1;
-      }
-
-      if (nextIndex !== null) {
-        e.preventDefault();
-        const nextBtn = tabButtons[nextIndex];
-        const targetId = nextBtn.getAttribute('data-tab');
-        activateTab(targetId, true);
+    tabPanes.forEach(pane => pane.setAttribute('role', 'tabpanel'));
+    tabList.addEventListener('keydown', event => {
+      const currentIndex = tabButtons.indexOf(document.activeElement);
+      if (currentIndex < 0) return;
+      let nextIndex;
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') nextIndex = (currentIndex + 1) % tabButtons.length;
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') nextIndex = (currentIndex + tabButtons.length - 1) % tabButtons.length;
+      if (event.key === 'Home') nextIndex = 0;
+      if (event.key === 'End') nextIndex = tabButtons.length - 1;
+      if (event.key === ' ') nextIndex = currentIndex;
+      if (nextIndex !== undefined) {
+        event.preventDefault();
+        activateTab(tabButtons[nextIndex].dataset.tab, true, true);
       }
     });
+    const restoreTab = () => activateTab(location.hash.slice(1));
+    window.addEventListener('hashchange', restoreTab);
+    window.addEventListener('popstate', restoreTab);
+    restoreTab();
   }
-
-  // Restore valid URL hash on page load or fallback to tab-general
-  if (tabButtons.length > 0) {
-    const rawHash = window.location.hash ? window.location.hash.replace('#', '') : '';
-    if (rawHash && document.getElementById(rawHash)) {
-      activateTab(rawHash, false);
-    } else {
-      activateTab('tab-general', false);
-    }
-  }
+  window.AuthUI.activateTab = activateTab;
 
   // 4. Header Avatar Edit Badge trigger
   const openAvatarModalBtn = document.getElementById('openAvatarModalBtn');
   if (openAvatarModalBtn) {
     openAvatarModalBtn.addEventListener('click', () => {
-      activateTab('tab-general');
+      activateTab('tab-general', false, true);
       const avatarInput = document.getElementById('avatarUrlInput');
       if (avatarInput) {
         avatarInput.focus();
-        avatarInput.scrollIntoView({behavior: 'smooth', block: 'center'});
+        window.AuthUI.scroll(avatarInput, 'center');
       }
     });
   }

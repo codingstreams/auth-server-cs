@@ -4,7 +4,7 @@
 <div class="settings-card" th:fragment="session-actions">
   <div class="settings-card-header">
     <div class="card-header-icon">
-      <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+      <svg aria-hidden="true" focusable="false" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
            viewBox="0 0 24 24" width="18">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
       </svg>
@@ -30,7 +30,7 @@
     <form class="logout-form" method="post" th:action="@{/logout}">
       <input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
       <button class="btn btn-danger" type="submit">
-        <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+        <svg aria-hidden="true" focusable="false" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
              stroke-width="2" viewBox="0 0 24 24" width="16">
           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
           <polyline points="16 17 21 12 16 7"></polyline>

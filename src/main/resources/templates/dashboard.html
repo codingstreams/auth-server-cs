@@ -13,34 +13,30 @@
     <div th:replace="~{fragments/alerts :: alerts}"></div>
 
     <!-- Navigation Tabs / Sections for Profile Management -->
-    <div aria-label="Profile navigation" class="profile-nav-tabs" role="tablist">
-      <button aria-controls="tab-general" aria-selected="true" class="nav-tab-btn active"
-              data-tab="tab-general" id="tab-btn-general" role="tab" tabindex="0" type="button">General</button>
-      <button aria-controls="tab-security" aria-selected="false" class="nav-tab-btn"
-              data-tab="tab-security" id="tab-btn-security" role="tab" tabindex="-1" type="button">Password</button>
-      <button aria-controls="tab-oauth" aria-selected="false" class="nav-tab-btn"
-              data-tab="tab-oauth" id="tab-btn-oauth" role="tab" tabindex="-1" type="button">Connected Accounts</button>
-      <button aria-controls="tab-passkeys" aria-selected="false" class="nav-tab-btn"
-              data-tab="tab-passkeys" id="tab-btn-passkeys" role="tab" tabindex="-1" type="button">Passkeys</button>
-    </div>
+    <nav aria-label="Profile navigation" class="profile-nav-tabs">
+      <a class="nav-tab-btn" href="#tab-general" data-tab="tab-general" id="tab-btn-general">General</a>
+      <a class="nav-tab-btn" href="#tab-security" data-tab="tab-security" id="tab-btn-security">Password</a>
+      <a class="nav-tab-btn" href="#tab-oauth" data-tab="tab-oauth" id="tab-btn-oauth">Connected Accounts</a>
+      <a class="nav-tab-btn" href="#tab-passkeys" data-tab="tab-passkeys" id="tab-btn-passkeys">Passkeys</a>
+    </nav>
 
     <!-- Tab 1: General Info & Avatar -->
-    <section aria-labelledby="tab-btn-general" class="tab-pane active" id="tab-general" role="tabpanel">
+    <section aria-labelledby="tab-btn-general" class="tab-pane" id="tab-general" role="region">
       <div th:replace="~{fragments/profile/profile-info :: profile-info}"></div>
     </section>
 
     <!-- Tab 2: Password & Credentials -->
-    <section aria-labelledby="tab-btn-security" class="tab-pane" hidden id="tab-security" role="tabpanel">
+    <section aria-labelledby="tab-btn-security" class="tab-pane" id="tab-security" role="region">
       <div th:replace="~{fragments/profile/security-password :: security-password}"></div>
     </section>
 
     <!-- Tab 3: Connected OAuth Methods -->
-    <section aria-labelledby="tab-btn-oauth" class="tab-pane" hidden id="tab-oauth" role="tabpanel">
+    <section aria-labelledby="tab-btn-oauth" class="tab-pane" id="tab-oauth" role="region">
       <div th:replace="~{fragments/profile/oauth-methods :: oauth-methods}"></div>
     </section>
 
     <!-- Tab 4: Passkeys -->
-    <section aria-labelledby="tab-btn-passkeys" class="tab-pane" hidden id="tab-passkeys" role="tabpanel">
+    <section aria-labelledby="tab-btn-passkeys" class="tab-pane" id="tab-passkeys" role="region">
       <div th:replace="~{fragments/profile/passkeys :: passkeys}"></div>
     </section>
   </div>

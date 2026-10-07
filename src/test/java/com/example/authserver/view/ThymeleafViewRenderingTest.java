@@ -145,10 +145,11 @@ class ThymeleafViewRenderingTest {
     assertThat(html).doesNotContain(">Verified<");
     assertThat(html).contains("Added on Oct 01, 2026");
     assertThat(html).contains("Unlink");
-    assertThat(html).contains("role=\"tablist\"");
-    assertThat(html).contains("role=\"tab\"");
-    assertThat(html).contains("role=\"tabpanel\"");
-    assertThat(html).contains("aria-controls=\"tab-general\"");
+    assertThat(html).contains("href=\"#tab-general\"");
+    assertThat(html).doesNotContain("role=\"tablist\"");
+    assertThat(html).contains("href=\"#tab-security\"");
+    assertThat(html).contains("role=\"region\"");
+    assertThat(html).contains("data-tab=\"tab-general\"");
     assertThat(html).contains("aria-labelledby=\"tab-btn-general\"");
     assertThat(html).contains("for=\"primaryEmailInput\"");
     assertThat(html).contains("for=\"avatarUrlInput\"");
