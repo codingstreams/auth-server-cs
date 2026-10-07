@@ -2,6 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 <section class="profile-header-card" th:fragment="profile-header">
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
+  <div class="profile-overview">
   <div class="profile-avatar-wrapper">
     <div class="profile-avatar" id="avatarDisplay">
       <img alt="" class="avatar-image" id="avatarImg" th:if="${avatarUrl != null and !avatarUrl.isBlank()}"
@@ -33,6 +35,7 @@
         <span th:replace="~{fragments/ui/badges :: badge(${auth.authority}, 'role')}"></span>
       </th:block>
     </div>
+  </div>
   </div>
 </section>
 </body>

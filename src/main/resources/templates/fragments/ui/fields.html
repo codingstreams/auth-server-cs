@@ -7,10 +7,10 @@
     <input type="text" th:id="${id}" th:name="${name}" th:value="${value}"
            th:autocomplete="${autocomplete}" th:required="${required}"
            th:attr="aria-invalid=${error != null and !#strings.isEmpty(error) ? 'true' : null},
-                    aria-describedby=${error != null and !#strings.isEmpty(error) ? id + '-error' : (helper != null and !#strings.isEmpty(helper) ? id + '-hint' : null)}">
+                    aria-describedby=${helper != null and !#strings.isEmpty(helper) ? id + '-hint' + (error != null and !#strings.isEmpty(error) ? ' ' + id + '-error' : '') : (error != null and !#strings.isEmpty(error) ? id + '-error' : null)}">
   </div>
   <span class="input-hint" th:if="${helper != null and !#strings.isEmpty(helper)}" th:id="${id + '-hint'}" th:text="${helper}"></span>
-  <span role="alert" th:if="${error != null and !#strings.isEmpty(error)}" th:id="${id + '-error'}" th:text="${error}"></span>
+  <span class="field-error" role="alert" th:if="${error != null and !#strings.isEmpty(error)}" th:id="${id + '-error'}" th:text="${error}"></span>
 </div>
 <div class="form-group" th:fragment="floating(id, name, label, type, autocomplete, minlength, autofocus, helper)">
   <div class="input-wrapper floating-input-wrapper">

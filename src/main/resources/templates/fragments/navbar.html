@@ -5,7 +5,7 @@
   <div class="navbar-container">
     <a class="navbar-brand" th:href="@{/login}">
       <div class="brand-icon">
-        <image class="brand-icon" th:src="@{/assets/auth-server-icon.png}"></image>
+        <img alt="" class="brand-icon" th:src="@{/assets/auth-server-icon.png}">
       </div>
       <span class="brand-name">Auth Server</span>
     </a>
@@ -36,9 +36,8 @@
 
       <!-- Optional Nav links when logged in -->
       <th:block th:if="${username != null and username != 'Anonymous'}">
-        <span class="navbar-user-chip"
-              th:text="${displayName != null and !displayName.isBlank() ? displayName : username}">user@example.com</span>
         <form class="navbar-logout-form" method="post" th:action="@{/logout}">
+          <input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
           <button th:replace="~{fragments/ui/buttons :: actionButton('Sign Out', 'outline-sm', 'submit', null, false)}"></button>
         </form>
       </th:block>

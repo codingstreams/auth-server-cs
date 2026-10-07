@@ -18,6 +18,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -59,7 +64,8 @@ class ThymeleafViewRenderingTest {
   @DisplayName("login.html renders successfully with expected fields and submit button")
   void testLoginHtmlRenders() {
     MockHttpServletRequest request = new MockHttpServletRequest(servletContext);
-    org.thymeleaf.context.IContext context = createWebContext(request);
+    var context = (org.thymeleaf.context.WebContext) createWebContext(request);
+    context.setVariables(Map.of("googleLoginUrl", "/oauth2/authorization/google", "githubLoginUrl", "/oauth2/authorization/github"));
 
     String html = templateEngine.process("login", context);
 
@@ -69,13 +75,17 @@ class ThymeleafViewRenderingTest {
     assertThat(html).contains("id=\"remember-me\"");
     assertThat(html).contains("id=\"loginBtn\"");
     assertThat(html).contains("class=\"btn btn-primary\"");
+    assertThat(html.indexOf("class=\"app-navbar\"")).isGreaterThan(html.indexOf("class=\"auth-card\""));
+    assertUniqueIds(html);
+    writePreview("login", html);
   }
 
   @Test
   @DisplayName("register.html renders successfully with expected fields and submit button")
   void testRegisterHtmlRenders() {
     MockHttpServletRequest request = new MockHttpServletRequest(servletContext);
-    org.thymeleaf.context.IContext context = createWebContext(request);
+    var context = (org.thymeleaf.context.WebContext) createWebContext(request);
+    context.setVariables(Map.of("googleLoginUrl", "/oauth2/authorization/google", "githubLoginUrl", "/oauth2/authorization/github"));
 
     String html = templateEngine.process("register", context);
 
@@ -85,6 +95,11 @@ class ThymeleafViewRenderingTest {
     assertThat(html).contains("id=\"regPassword\"");
     assertThat(html).contains("id=\"regConfirmPassword\"");
     assertThat(html).contains("id=\"registerBtn\"");
+    assertThat(html).contains("aria-describedby=\"regPassword-hint\"");
+    assertThat(html).contains("Use at least 8 characters.");
+    assertThat(html).contains("Sign in with an existing passkey");
+    assertUniqueIds(html);
+    writePreview("register", html);
   }
 
   @Test
@@ -115,6 +130,17 @@ class ThymeleafViewRenderingTest {
     assertThat(Pattern.compile("<span\\b[^>]*>Update Avatar</span>").matcher(html).results()).hasSize(1);
     assertThat(html).contains("No passkeys registered yet");
     assertThat(Pattern.compile("<span\\b[^>]*>Sign Out</span>").matcher(html).results()).hasSize(1);
+    assertThat(html).doesNotContain("Sign Out Everywhere", "> Active<", ">Verified<");
+    assertThat(html).contains("id=\"avatarInitials\"", "id=\"avatarPreviewStatus\"");
+    assertThat(Pattern.compile("<section[^>]*class=\"tab-pane\"[^>]*>").matcher(html).results()).hasSize(4);
+    assertThat(Pattern.compile("<section[^>]*class=\"tab-pane\"[^>]*hidden").matcher(html).results()).isEmpty();
+    assertThat(html).doesNotContain("navbar-user-chip");
+    assertThat(html.indexOf("class=\"app-navbar\"")).isGreaterThan(html.indexOf("class=\"profile-header-card\""));
+    assertUniqueIds(html);
+    writePreview("dashboard-local", html);
+    context.setVariable("displayName", "Very long display name ".repeat(12));
+    context.setVariable("username", "very-long-address-".repeat(10) + "@example.com");
+    writePreview("dashboard-long", templateEngine.process("dashboard", context));
   }
 
   @Test
@@ -154,6 +180,9 @@ class ThymeleafViewRenderingTest {
     assertThat(html).contains("for=\"primaryEmailInput\"");
     assertThat(html).contains("for=\"avatarUrlInput\"");
     assertThat(html).contains("for=\"passkeyNameInput\"");
+    assertThat(html).contains("id=\"avatarInitials\"");
+    assertUniqueIds(html);
+    writePreview("dashboard-oauth", html);
   }
 
   @Test
@@ -206,4 +235,34 @@ class ThymeleafViewRenderingTest {
     assertThat(html).contains("aria-label=\"Unlink Google account\"");
     assertThat(html).contains("aria-label=\"Unlink GitHub account\"");
   }
+  @Test
+  @DisplayName("shared text fields escape values and associate helpers and validation messages")
+  void testFieldSemanticsAndEscaping() {
+    var context = (org.thymeleaf.context.WebContext) createWebContext(new MockHttpServletRequest(servletContext));
+    context.setVariables(Map.of("id", "testField", "name", "testName", "label", "Test field",
+        "value", "<script>alert(1)</script>", "autocomplete", "name", "required", true,
+        "helper", "Helpful text", "error", "Please correct this field."));
+    String html = templateEngine.process("fragments/ui/fields", Set.of("text"), context);
+    assertThat(html).contains("for=\"testField\"", "aria-invalid=\"true\"",
+        "aria-describedby=\"testField-hint testField-error\"", "id=\"testField-hint\"", "id=\"testField-error\"");
+    assertThat(html).contains("&lt;script&gt;").doesNotContain("<script>");
+    assertUniqueIds(html);
+  }
+
+  private void assertUniqueIds(String html) {
+    var ids = Pattern.compile("\\bid=\"([^\"]+)\"").matcher(html).results().map(match -> match.group(1)).toList();
+    assertThat(ids).doesNotHaveDuplicates();
+  }
+
+  // Render real templates for repeatable browser inspection without an authenticated service account.
+  private void writePreview(String name, String html) {
+    try {
+      Path directory = Path.of("target", "ui-preview");
+      Files.createDirectories(directory);
+      Files.writeString(directory.resolve(name + ".html"), html);
+    } catch (IOException exception) {
+      throw new UncheckedIOException(exception);
+    }
+  }
+
 }
