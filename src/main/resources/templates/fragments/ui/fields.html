@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="form-group" th:fragment="text(id, name, label, value, autocomplete, required, helper, error)">
+  <label th:for="${id}" th:text="${label}">Label</label>
+  <div class="input-wrapper">
+    <input type="text" th:id="${id}" th:name="${name}" th:value="${value}"
+           th:autocomplete="${autocomplete}" th:required="${required}"
+           th:attr="aria-invalid=${error != null and !#strings.isEmpty(error) ? 'true' : null},
+                    aria-describedby=${error != null and !#strings.isEmpty(error) ? id + '-error' : (helper != null and !#strings.isEmpty(helper) ? id + '-hint' : null)}">
+  </div>
+  <span class="input-hint" th:if="${helper != null and !#strings.isEmpty(helper)}" th:id="${id + '-hint'}" th:text="${helper}"></span>
+  <span role="alert" th:if="${error != null and !#strings.isEmpty(error)}" th:id="${id + '-error'}" th:text="${error}"></span>
+</div>
+<div class="form-group" th:fragment="floating(id, name, label, type, autocomplete, minlength, autofocus)">
+  <div class="input-wrapper floating-input-wrapper">
+    <span class="input-icon">
+      <th:block th:replace="~{fragments/ui/icons :: icon(${type == 'password' ? 'lock' : (type == 'email' ? 'email' : 'user')})}"></th:block>
+    </span>
+    <input placeholder=" " required th:id="${id}" th:name="${name}" th:type="${type}"
+           th:autocomplete="${autocomplete}" th:minlength="${minlength}" th:autofocus="${autofocus}">
+    <label class="floating-label" th:for="${id}" th:text="${label}">Label</label>
+    <th:block th:if="${type == 'password'}">
+      <button aria-label="Toggle password visibility" class="toggle-password-btn" title="Toggle password visibility"
+              type="button" th:id="${id == 'password' ? 'togglePasswordBtn' : null}" th:attr="aria-controls=${id}">
+        <th:block th:replace="~{fragments/ui/icons :: icon('eye-open')}"></th:block>
+        <th:block th:replace="~{fragments/ui/icons :: icon('eye-closed')}"></th:block>
+      </button>
+    </th:block>
+  </div>
+</div>
+<div class="form-group" th:fragment="password(id, name, label, autocomplete, minlength)">
+  <label th:for="${id}" th:text="${label}">Password</label>
+  <div class="input-wrapper">
+    <input type="password" placeholder="••••••••" required th:id="${id}" th:name="${name}"
+           th:autocomplete="${autocomplete}" th:minlength="${minlength}">
+  </div>
+</div>
+</body>
+</html>

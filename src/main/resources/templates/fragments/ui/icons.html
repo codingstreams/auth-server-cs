@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="icon(name)">
+  <svg aria-hidden="true" focusable="false" th:if="${name == 'email'}" fill="none" height="15" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15">
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+    <polyline points="22,6 12,13 2,6"></polyline>
+  </svg>
+  <svg aria-hidden="true" focusable="false" th:if="${name == 'lock'}" fill="none" height="15" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15">
+    <rect height="11" rx="2" ry="2" width="18" x="3" y="11"></rect>
+    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+  </svg>
+  <svg aria-hidden="true" focusable="false" th:if="${name == 'eye-open'}" class="eye-open" fill="none" height="15" stroke="currentColor" stroke-width="2"
+         viewBox="0 0 24 24" width="15">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+    <circle cx="12" cy="12" r="3"></circle>
+  </svg>
+  <svg aria-hidden="true" focusable="false" th:if="${name == 'eye-closed'}" class="eye-closed hidden" fill="none" height="15" stroke="currentColor"
+                     stroke-width="2" viewBox="0 0 24 24" width="15">
+    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+    <line x1="1" x2="23" y1="1" y2="23"></line>
+  </svg>
+  <svg aria-hidden="true" focusable="false" th:if="${name == 'user'}" fill="none" height="15" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+    <circle cx="12" cy="7" r="4"></circle>
+  </svg>
+  <svg aria-hidden="true" focusable="false" th:if="${name == 'error'}" fill="none" height="16" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16">
+    <circle cx="12" cy="12" r="10"></circle>
+    <line x1="12" x2="12" y1="8" y2="12"></line>
+    <line x1="12" x2="12.01" y1="16" y2="16"></line>
+  </svg>
+  <svg aria-hidden="true" focusable="false" th:if="${name == 'success'}" fill="none" height="16" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16">
+    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+  </svg>
+  <svg aria-hidden="true" focusable="false" th:if="${name == 'passkey'}" fill="none" height="32" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" width="32">
+    <path
+         d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3H9z"></path>
+  </svg>
+</th:block>
+</body>
+</html>

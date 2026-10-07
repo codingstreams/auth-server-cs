@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<label class="checkbox-label" th:fragment="checkbox(id, name, label, checked, disabled)" th:for="${id}">
+  <input class="checkbox-input" type="checkbox" th:id="${id}" th:name="${name}"
+         th:checked="${checked}" th:disabled="${disabled}">
+  <span class="checkbox-text" th:text="${label}">Option</span>
+</label>
+</body>
+</html>

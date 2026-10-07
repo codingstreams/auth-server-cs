@@ -20,95 +20,18 @@
         <h2 class="column-title">Account Details</h2>
         <form class="auth-form" id="registerForm" method="post" th:action="@{/register}">
           <!-- Full Name Field -->
-          <div class="form-group">
-            <div class="input-wrapper floating-input-wrapper">
-              <span class="input-icon">
-                <svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-              </span>
-              <input autocomplete="name" autofocus id="regName" name="name" placeholder=" " required type="text">
-              <label class="floating-label" for="regName">Full Name</label>
-            </div>
-          </div>
+          <div th:replace="~{fragments/ui/fields :: floating('regName', 'name', 'Full Name', 'text', 'name', null, true)}"></div>
 
           <!-- Email Field -->
-          <div class="form-group">
-            <div class="input-wrapper floating-input-wrapper">
-              <span class="input-icon">
-                <svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                  <polyline points="22,6 12,13 2,6"></polyline>
-                </svg>
-              </span>
-              <input autocomplete="email" id="regEmail" name="email" placeholder=" " required type="email">
-              <label class="floating-label" for="regEmail">Email address</label>
-            </div>
-          </div>
+          <div th:replace="~{fragments/ui/fields :: floating('regEmail', 'email', 'Email address', 'email', 'email', null, false)}"></div>
 
           <!-- Password Field -->
-          <div class="form-group">
-            <div class="input-wrapper floating-input-wrapper">
-              <span class="input-icon">
-                <svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15">
-                  <rect height="11" rx="2" ry="2" width="18" x="3" y="11"></rect>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                </svg>
-              </span>
-              <input autocomplete="new-password" id="regPassword" minlength="8" name="password" placeholder=" "
-                     required type="password">
-              <label class="floating-label" for="regPassword">Password (min. 8 characters)</label>
-              <button aria-label="Toggle password visibility" class="toggle-password-btn"
-                      title="Toggle password visibility" type="button">
-                <svg class="eye-open" fill="none" height="15" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-                     width="15">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                  <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-                <svg class="eye-closed hidden" fill="none" height="15" stroke="currentColor" stroke-width="2"
-                     viewBox="0 0 24 24" width="15">
-                  <path
-                      d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                  <line x1="1" x2="23" y1="1" y2="23"></line>
-                </svg>
-              </button>
-            </div>
-          </div>
+          <div th:replace="~{fragments/ui/fields :: floating('regPassword', 'password', 'Password (min. 8 characters)', 'password', 'new-password', 8, false)}"></div>
 
           <!-- Confirm Password Field -->
-          <div class="form-group">
-            <div class="input-wrapper floating-input-wrapper">
-              <span class="input-icon">
-                <svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15">
-                  <rect height="11" rx="2" ry="2" width="18" x="3" y="11"></rect>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                </svg>
-              </span>
-              <input autocomplete="new-password" id="regConfirmPassword" minlength="8" name="confirmPassword"
-                     placeholder=" " required type="password">
-              <label class="floating-label" for="regConfirmPassword">Confirm Password</label>
-              <button aria-label="Toggle password visibility" class="toggle-password-btn"
-                      title="Toggle password visibility" type="button">
-                <svg class="eye-open" fill="none" height="15" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-                     width="15">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                  <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-                <svg class="eye-closed hidden" fill="none" height="15" stroke="currentColor" stroke-width="2"
-                     viewBox="0 0 24 24" width="15">
-                  <path
-                      d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                  <line x1="1" x2="23" y1="1" y2="23"></line>
-                </svg>
-              </button>
-            </div>
-          </div>
+          <div th:replace="~{fragments/ui/fields :: floating('regConfirmPassword', 'confirmPassword', 'Confirm Password', 'password', 'new-password', 8, false)}"></div>
 
-          <button class="btn btn-primary" id="registerBtn" type="submit">
-            <span class="btn-text">Create Account</span>
-            <span class="btn-spinner hidden"></span>
-          </button>
+          <button th:replace="~{fragments/ui/buttons :: submit('Create Account', 'registerBtn')}"></button>
 
           <div class="auth-footer-link">
             <span>Already have an account?</span>

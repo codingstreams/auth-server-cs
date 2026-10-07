@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="empty-state" th:fragment="empty(message, icon)">
+  <th:block th:replace="~{fragments/ui/icons :: icon(${icon})}"></th:block>
+  <p th:text="${message}">No items yet.</p>
+</div>
+</body>
+</html>

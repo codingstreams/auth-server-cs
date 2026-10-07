@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="alert" th:fragment="alert(severity, message)" th:classappend="'alert-' + ${severity}"
+     th:role="${severity == 'error' ? 'alert' : 'status'}">
+  <th:block th:replace="~{fragments/ui/icons :: icon(${severity == 'error' ? 'error' : 'success'})}"></th:block>
+  <span th:text="${message}">Message</span>
+</div>
+</body>
+</html>
