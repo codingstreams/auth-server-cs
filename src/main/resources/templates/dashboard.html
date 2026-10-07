@@ -25,22 +25,22 @@
     </div>
 
     <!-- Tab 1: General Info & Avatar -->
-    <section aria-labelledby="tab-btn-general" class="tab-pane active" id="tab-general" role="tabpanel" tabindex="0">
+    <section aria-labelledby="tab-btn-general" class="tab-pane active" id="tab-general" role="tabpanel">
       <div th:replace="~{fragments/profile/profile-info :: profile-info}"></div>
     </section>
 
     <!-- Tab 2: Password & Credentials -->
-    <section aria-labelledby="tab-btn-security" class="tab-pane" hidden id="tab-security" role="tabpanel" tabindex="0">
+    <section aria-labelledby="tab-btn-security" class="tab-pane" hidden id="tab-security" role="tabpanel">
       <div th:replace="~{fragments/profile/security-password :: security-password}"></div>
     </section>
 
     <!-- Tab 3: Connected OAuth Methods -->
-    <section aria-labelledby="tab-btn-oauth" class="tab-pane" hidden id="tab-oauth" role="tabpanel" tabindex="0">
+    <section aria-labelledby="tab-btn-oauth" class="tab-pane" hidden id="tab-oauth" role="tabpanel">
       <div th:replace="~{fragments/profile/oauth-methods :: oauth-methods}"></div>
     </section>
 
     <!-- Tab 4: Passkeys -->
-    <section aria-labelledby="tab-btn-passkeys" class="tab-pane" hidden id="tab-passkeys" role="tabpanel" tabindex="0">
+    <section aria-labelledby="tab-btn-passkeys" class="tab-pane" hidden id="tab-passkeys" role="tabpanel">
       <div th:replace="~{fragments/profile/passkeys :: passkeys}"></div>
     </section>
   </div>

@@ -84,6 +84,37 @@ html {
     -webkit-text-size-adjust: 100%;
 }
 
+/* Shared scrollbars: rounded thumbs for page and nested scroll areas. */
+@media (forced-colors: none) {
+    *::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    *::-webkit-scrollbar-track,
+    *::-webkit-scrollbar-corner {
+        background: transparent;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: var(--text-muted);
+        border: 2px solid transparent;
+        background-clip: padding-box;
+        border-radius: var(--radius-full);
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+        background-color: var(--text-secondary);
+    }
+
+    @supports not selector(::-webkit-scrollbar) {
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--text-muted) var(--bg-page);
+        }
+    }
+}
+
 @media (min-width: 768px) {
     html {
         font-size: 19px;
@@ -525,6 +556,11 @@ input[readonly] {
     z-index: 2;
 }
 
+.input-wrapper:has(> .input-hint) {
+    flex-direction: column;
+    align-items: stretch;
+}
+
 .input-hint {
     font-size: 0.725rem;
     color: var(--text-muted);
@@ -538,6 +574,16 @@ input[readonly] {
 
 .input-inline-group .input-wrapper {
     flex: 1;
+    min-width: 0;
+}
+
+.input-inline-group .input-wrapper input {
+    height: 100%;
+    min-height: 44px;
+}
+
+.input-inline-group > .btn {
+    flex-shrink: 0;
 }
 
 .form-row-2 {
@@ -1039,6 +1085,7 @@ input[readonly] {
 
 .tab-pane {
     display: block;
+    outline: none;
 }
 
 .tab-pane[hidden] {
@@ -1048,11 +1095,6 @@ input[readonly] {
 .tab-pane.active {
     display: block;
     animation: fadeIn 0.2s ease-in-out;
-}
-
-.tab-pane:focus-visible {
-    outline: 2px solid var(--border-focus);
-    outline-offset: 4px;
 }
 
 @keyframes fadeIn {
@@ -1445,6 +1487,10 @@ input[readonly] {
 @media (max-width: 640px) {
     .input-inline-group {
         flex-direction: column;
+    }
+
+    .input-inline-group .input-wrapper input {
+        height: 44px;
     }
 
     .input-inline-group .btn {

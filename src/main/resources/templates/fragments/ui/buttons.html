@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-<button class="btn" th:fragment="button(label, variant, type, id, disabled)"
+<button class="btn" th:fragment="actionButton(label, variant, type, id, disabled)"
         th:classappend="'btn-' + ${variant}" th:type="${type}" th:id="${id}" th:disabled="${disabled}">
   <span th:text="${label}">Action</span>
 </button>

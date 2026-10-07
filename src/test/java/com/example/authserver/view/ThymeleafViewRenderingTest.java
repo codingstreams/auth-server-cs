@@ -17,6 +17,7 @@ import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -110,10 +111,10 @@ class ThymeleafViewRenderingTest {
     assertThat(html).contains("Provider: LOCAL");
     assertThat(html).contains("ROLE_USER");
     assertThat(html).contains("Update Password");
-    assertThat(html).contains("Save Name");
-    assertThat(html).contains("Update Avatar");
+    assertThat(Pattern.compile("<span\\b[^>]*>Save Name</span>").matcher(html).results()).hasSize(1);
+    assertThat(Pattern.compile("<span\\b[^>]*>Update Avatar</span>").matcher(html).results()).hasSize(1);
     assertThat(html).contains("No passkeys registered yet");
-    assertThat(html).contains("Sign Out");
+    assertThat(Pattern.compile("<span\\b[^>]*>Sign Out</span>").matcher(html).results()).hasSize(1);
   }
 
   @Test

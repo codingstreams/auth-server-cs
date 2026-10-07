@@ -27,14 +27,14 @@
           <input autocomplete="name" id="displayNameInput" name="displayName" placeholder="Enter your full name"
                  required th:value="${displayName}" type="text">
         </div>
-        <button th:replace="~{fragments/ui/buttons :: button('Save Name', 'secondary', 'submit', null, false)}"></button>
+        <button th:replace="~{fragments/ui/buttons :: actionButton('Save Name', 'secondary', 'submit', null, false)}"></button>
       </div>
     </div>
 
     <div class="form-group">
       <label for="primaryEmailInput">Primary Email (Login Identifier)</label>
       <div class="input-wrapper">
-        <input id="primaryEmailInput" disabled readonly th:value="${username}" type="email">
+        <input id="primaryEmailInput" aria-describedby="primaryEmailHint" disabled readonly th:value="${username}" type="email">
         <span class="input-hint" id="primaryEmailHint">Your email address is managed through your authentication provider.</span>
       </div>
     </div>
@@ -51,7 +51,7 @@
             <input id="avatarUrlInput" name="avatarUrl" placeholder="https://example.com/avatar.png"
                    th:value="${avatarUrl}" type="url">
           </div>
-          <button th:replace="~{fragments/ui/buttons :: button('Update Avatar', 'secondary', 'submit', null, false)}"></button>
+          <button th:replace="~{fragments/ui/buttons :: actionButton('Update Avatar', 'secondary', 'submit', null, false)}"></button>
         </div>
       </div>
       <div class="avatar-presets">
