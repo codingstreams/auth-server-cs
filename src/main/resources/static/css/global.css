@@ -1631,3 +1631,18 @@ input[readonly] {
 }
 
 
+
+/* Loading overlays keep the original content in layout, preventing width changes. */
+[hidden] { display: none !important; }
+.btn { position: relative; }
+.btn.is-loading > :not(.btn-loading-label) { visibility: hidden; }
+.btn-loading-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+.field-error { color: var(--danger-fg); font-size: 0.875rem; }

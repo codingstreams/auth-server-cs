@@ -4,9 +4,9 @@
 <section class="profile-header-card" th:fragment="profile-header">
   <div class="profile-avatar-wrapper">
     <div class="profile-avatar" id="avatarDisplay">
-      <img alt="User Avatar" class="avatar-image" id="avatarImg" th:if="${avatarUrl != null and !avatarUrl.isBlank()}"
+      <img alt="" class="avatar-image" id="avatarImg" th:if="${avatarUrl != null and !avatarUrl.isBlank()}"
            th:src="${avatarUrl}"/>
-      <span class="avatar-initials" id="avatarInitials" th:if="${avatarUrl == null or avatarUrl.isBlank()}"
+      <span class="avatar-initials" id="avatarInitials" th:hidden="${avatarUrl != null and !avatarUrl.isBlank()}"
             th:text="${displayName != null and !displayName.isBlank() ? #strings.substring(displayName, 0, 1).toUpperCase() : (username != null ? #strings.substring(username, 0, 1).toUpperCase() : 'U')}">U</span>
     </div>
     <button aria-label="Change profile avatar" class="avatar-edit-badge" id="openAvatarModalBtn" title="Change Avatar"

@@ -1,3 +1,45 @@
+// Shared interaction states used by native forms and both passkey clients.
+window.AuthUI = (() => {
+  const pending = new Map();
+  const scroll = (element, block = 'nearest') => element?.scrollIntoView({
+    behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block
+  });
+  function setBusy(button, message) {
+    if (!button || pending.has(button)) return;
+    pending.set(button, {html: button.innerHTML, disabled: button.disabled});
+    button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
+    button.classList.add('is-loading');
+    const overlay = document.createElement('span');
+    overlay.className = 'btn-loading-label';
+    const spinner = document.createElement('span');
+    spinner.className = 'btn-spinner';
+    spinner.setAttribute('aria-hidden', 'true');
+    overlay.append(spinner, document.createTextNode(message));
+    button.append(overlay);
+  }
+  function restore(button) {
+    const original = pending.get(button);
+    if (!original) return;
+    button.innerHTML = original.html;
+    button.disabled = original.disabled;
+    button.removeAttribute('aria-busy');
+    button.classList.remove('is-loading');
+    pending.delete(button);
+  }
+  function feedback(id, message, severity = 'error') {
+    const region = document.getElementById(id);
+    if (!region) return;
+    region.className = severity === 'error' ? 'alert alert-error' : 'notice-box';
+    region.setAttribute('role', severity === 'error' ? 'alert' : 'status');
+    region.textContent = message;
+    region.hidden = false;
+    scroll(region);
+  }
+  window.addEventListener('pageshow', () => [...pending.keys()].forEach(restore));
+  return {setBusy, restore, feedback, scroll};
+})();
+
 /**
  * Auth Server - Interactive UI Logic
  * Monochromatic Theme, Tab Switching, Form Validation, and Avatar Customization
@@ -11,10 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const isDark = document.documentElement.classList.contains('dark');
       if (isDark) {
         document.documentElement.classList.remove('dark');
-        localStorage.setItem('auth_theme', 'light');
+        try { localStorage.setItem('auth_theme', 'light'); } catch (e) {}
       } else {
         document.documentElement.classList.add('dark');
-        localStorage.setItem('auth_theme', 'dark');
+        try { localStorage.setItem('auth_theme', 'dark'); } catch (e) {}
       }
     });
   });
@@ -160,47 +202,47 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 5. Password Confirmation Checks
-  const registerForm = document.getElementById('registerForm');
-  if (registerForm) {
-    const regPassword = document.getElementById('regPassword');
-    const regConfirm = document.getElementById('regConfirmPassword');
-
-    function checkPasswordsMatch() {
-      if (regPassword && regConfirm) {
-        if (regPassword.value !== regConfirm.value) {
-          regConfirm.setCustomValidity('Passwords do not match');
-        } else {
-          regConfirm.setCustomValidity('');
-        }
-      }
+  // Native validity plus an associated, visible confirmation message.
+  function attachPasswordMatchValidation(pwdId, confirmId) {
+    const password = document.getElementById(pwdId);
+    const confirmation = document.getElementById(confirmId);
+    if (!password || !confirmation) return;
+    const error = document.createElement('span');
+    error.id = confirmId + '-error';
+    error.className = 'field-error';
+    error.hidden = true;
+    confirmation.closest('.form-group').append(error);
+    const descriptions = confirmation.getAttribute('aria-describedby');
+    confirmation.setAttribute('aria-describedby', [descriptions, error.id].filter(Boolean).join(' '));
+    function checkMatch() {
+      const mismatch = Boolean(confirmation.value && password.value !== confirmation.value);
+      confirmation.setCustomValidity(mismatch ? 'Passwords do not match.' : '');
+      confirmation.setAttribute('aria-invalid', mismatch ? 'true' : 'false');
+      error.textContent = mismatch ? 'Passwords do not match.' : '';
+      error.hidden = !mismatch;
     }
-
-    if (regPassword && regConfirm) {
-      regPassword.addEventListener('input', checkPasswordsMatch);
-      regConfirm.addEventListener('input', checkPasswordsMatch);
-    }
+    password.addEventListener('input', checkMatch);
+    confirmation.addEventListener('input', checkMatch);
   }
-
-  // Security tab password confirmation (works for both existing password and OAuth set-password forms)
-  function attachPasswordMatchValidation(pwdId, confirmPwdId) {
-    const pwd = document.getElementById(pwdId);
-    const confirmPwd = document.getElementById(confirmPwdId);
-    if (pwd && confirmPwd) {
-      function checkMatch() {
-        if (pwd.value && confirmPwd.value && pwd.value !== confirmPwd.value) {
-          confirmPwd.setCustomValidity('Passwords do not match');
-        } else {
-          confirmPwd.setCustomValidity('');
-        }
-      }
-      pwd.addEventListener('input', checkMatch);
-      confirmPwd.addEventListener('input', checkMatch);
-    }
-  }
-
+  attachPasswordMatchValidation('regPassword', 'regConfirmPassword');
   attachPasswordMatchValidation('newPassword', 'confirmNewPassword');
   attachPasswordMatchValidation('setNewPassword', 'setConfirmPassword');
+  document.addEventListener('invalid', event => {
+    const form = event.target.form;
+    const firstInvalid = form?.querySelector('input:invalid');
+    if (firstInvalid) firstInvalid.focus();
+  }, true);
+
+  const initialAvatar = document.getElementById('avatarImg');
+  const initials = document.getElementById('avatarInitials');
+  if (initialAvatar && initials) {
+    initialAvatar.addEventListener('error', () => { initialAvatar.hidden = true; initials.hidden = false; });
+    initialAvatar.addEventListener('load', () => { initialAvatar.hidden = false; initials.hidden = true; });
+    if (initialAvatar.complete && !initialAvatar.naturalWidth) {
+      initialAvatar.hidden = true;
+      initials.hidden = false;
+    }
+  }
 
   // Avatar URL input live preview with fallback handling
   const avatarUrlInput = document.getElementById('avatarUrlInput');
@@ -210,25 +252,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 6. Form Submission Spinner Feedback
-  function setupFormSpinner(formId, btnId, loadingText) {
-    const form = document.getElementById(formId);
-    const btn = document.getElementById(btnId);
-    if (form && btn) {
-      const btnText = btn.querySelector('.btn-text');
-      const btnSpinner = btn.querySelector('.btn-spinner');
-
-      form.addEventListener('submit', () => {
-        if (!form.checkValidity()) return;
-        btn.disabled = true;
-        if (btnText && loadingText) btnText.textContent = loadingText;
-        if (btnSpinner) btnSpinner.classList.remove('hidden');
-      });
-    }
-  }
-
-  setupFormSpinner('loginForm', 'loginBtn', 'Signing In...');
-  setupFormSpinner('registerForm', 'registerBtn', 'Creating Account...');
+  // Native POST forms navigate to server feedback; browser-history returns reset loading.
+  document.querySelectorAll('form:not(.add-passkey-form)').forEach(form => {
+    form.addEventListener('submit', event => {
+      const button = event.submitter || form.querySelector('button[type="submit"]');
+      if (button?.getAttribute('aria-busy') === 'true') { event.preventDefault(); return; }
+      if (!form.checkValidity()) return;
+      const message = form.id === 'loginForm' ? 'Signing in…' : form.id === 'registerForm' ? 'Creating account…' : form.getAttribute('action') === '/logout' ? 'Signing out…' : 'Saving…';
+      window.AuthUI.setBusy(button, message);
+    });
+  });
 });
 
 /**
@@ -236,37 +269,29 @@ document.addEventListener('DOMContentLoaded', () => {
  * @param {string} url - Preset SVG avatar URL or empty for reset
  */
 window.selectPresetAvatar = function (url) {
-  const avatarInput = document.getElementById('avatarUrlInput');
-  const avatarDisplay = document.getElementById('avatarDisplay');
-
-  if (avatarInput && avatarInput.value !== url) {
-    avatarInput.value = url;
+  const input = document.getElementById('avatarUrlInput');
+  const display = document.getElementById('avatarDisplay');
+  if (!input || !display) return;
+  input.value = url;
+  const initials = document.getElementById('avatarInitials');
+  let image = document.getElementById('avatarImg');
+  const previewStatus = document.getElementById('avatarPreviewStatus');
+  if (previewStatus) previewStatus.hidden = url === input.defaultValue;
+  if (!url.trim()) {
+    if (image) image.hidden = true;
+    if (initials) initials.hidden = false;
+    return;
   }
-
-  if (avatarDisplay) {
-    const avatarInitials = document.getElementById('avatarInitials');
-    let avatarImg = document.getElementById('avatarImg');
-
-    if (url && url.trim() !== '') {
-      if (!avatarImg) {
-        avatarImg = document.createElement('img');
-        avatarImg.id = 'avatarImg';
-        avatarImg.className = 'avatar-image';
-        avatarImg.alt = 'User Avatar';
-        avatarDisplay.appendChild(avatarImg);
-      }
-
-      avatarImg.onerror = function () {
-        avatarImg.style.display = 'none';
-        if (avatarInitials) avatarInitials.style.display = 'block';
-      };
-
-      avatarImg.src = url;
-      avatarImg.style.display = 'block';
-      if (avatarInitials) avatarInitials.style.display = 'none';
-    } else {
-      if (avatarImg) avatarImg.style.display = 'none';
-      if (avatarInitials) avatarInitials.style.display = 'block';
-    }
+  if (!image) {
+    image = document.createElement('img');
+    image.id = 'avatarImg';
+    image.className = 'avatar-image';
+    image.alt = '';
+    display.append(image);
   }
+  image.onerror = () => { image.hidden = true; if (initials) initials.hidden = false; };
+  image.onload = () => { image.hidden = false; if (initials) initials.hidden = true; };
+  image.hidden = true;
+  if (initials) initials.hidden = false;
+  image.src = url;
 };

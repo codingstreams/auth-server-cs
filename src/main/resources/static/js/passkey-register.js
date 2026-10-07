@@ -47,13 +47,13 @@ function bufferToBase64Url(buffer) {
  * Main WebAuthn Passkey Registration Handler
  */
 async function handlePasskeyRegistration() {
+  if (document.getElementById("registerPasskeyBtn")?.getAttribute("aria-busy") === "true") return;
   if (!window.PublicKeyCredential) {
     showInPagePasskeyAlert("Passkeys and WebAuthn are not supported on this device or browser.");
     return;
   }
 
   const registerBtn = document.getElementById("registerPasskeyBtn");
-  const originalText = registerBtn ? registerBtn.innerHTML : "Add Passkey";
   const labelInput = document.getElementById("passkeyNameInput");
   const label = (labelInput && labelInput.value.trim()) ? labelInput.value.trim() : "Passkey (" + new Date().toLocaleDateString() + ")";
 
@@ -67,10 +67,7 @@ async function handlePasskeyRegistration() {
   }
 
   try {
-    if (registerBtn) {
-      registerBtn.disabled = true;
-      registerBtn.innerHTML = '<span class="btn-spinner"></span> Registering...';
-    }
+    window.AuthUI.setBusy(registerBtn, "Registering…");
 
     // 1. Fetch Registration Options (Challenge) from PasskeyController
     const startUrl = `/api/passkeys/register/start?email=${encodeURIComponent(email)}`;
@@ -147,55 +144,16 @@ async function handlePasskeyRegistration() {
 
   } catch (err) {
     if (err.name === "NotAllowedError") {
-      console.info("User cancelled the passkey creation process.");
+      showInPagePasskeyAlert("Passkey operation cancelled or timed out. You can try again.", "status");
     } else {
       console.error("Passkey Registration Error:", err);
       showInPagePasskeyAlert(err.message || "An error occurred during passkey registration.");
     }
   } finally {
-    if (registerBtn) {
-      registerBtn.disabled = false;
-      registerBtn.innerHTML = originalText;
-    }
+    window.AuthUI.restore(registerBtn);
   }
 }
 
-function showInPagePasskeyAlert(message) {
-  let alertsContainer = document.querySelector('.alerts-container');
-  if (!alertsContainer) {
-    const mainContainer = document.querySelector('.profile-container');
-    if (mainContainer) {
-      alertsContainer = document.createElement('div');
-      alertsContainer.className = 'alerts-container';
-      const header = mainContainer.querySelector('.profile-header-card');
-      if (header) {
-        header.after(alertsContainer);
-      } else {
-        mainContainer.prepend(alertsContainer);
-      }
-    }
-  }
-
-  if (alertsContainer) {
-    const alert = document.createElement('div');
-    alert.className = 'alert alert-error';
-    alert.setAttribute('role', 'alert');
-    alert.innerHTML = `
-      <svg aria-hidden="true" focusable="false" fill="none" height="16" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16">
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="12" x2="12" y1="8" y2="12"></line>
-        <line x1="12" x2="12.01" y1="16" y2="16"></line>
-      </svg>
-      <span>${escapeHtml(message)}</span>
-    `;
-    alertsContainer.innerHTML = '';
-    alertsContainer.appendChild(alert);
-    alert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-}
-
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
+function showInPagePasskeyAlert(message, severity = 'error') {
+  window.AuthUI.feedback('passkeyRegistrationFeedback', message, severity);
 }

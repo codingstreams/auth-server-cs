@@ -55,6 +55,7 @@
 
   <!-- Add Passkey Section / Trigger -->
   <div class="add-passkey-box">
+    <div id="passkeyRegistrationFeedback" hidden></div>
     <form class="add-passkey-form" method="post" th:action="@{/profile/passkeys/add}">
       <input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
       <div class="form-group">
