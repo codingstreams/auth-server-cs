@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Secure Bank - Transfer Funds</title>
+  <style>
+      body { font-family: Arial, sans-serif; margin: 50px; background-color: #f4f6f9; }
+      .container { background: white; padding: 30px; border-radius: 8px; max-width: 400px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+      .form-group { margin-bottom: 15px; }
+      label { display: block; margin-bottom: 5px; font-weight: bold; }
+      input[type="text"], input[type="number"] { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+      button { background: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
+      button:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Secure Money Transfer</h2>
+
+  <form th:action="@{/transfer}" method="POST">
+
+    <div class="form-group">
+      <label for="account">Recipient Account Number:</label>
+      <input type="text" id="account" name="account" placeholder="e.g., 987654321" required />
+    </div>
+
+    <div class="form-group">
+      <label for="amount">Amount ($):</label>
+      <input type="number" id="amount" name="amount" min="1" step="0.01" placeholder="0.00" required />
+    </div>
+
+    <button type="submit">Confirm & Transfer</button>
+  </form>
+</div>
+
+</body>
+</html>
