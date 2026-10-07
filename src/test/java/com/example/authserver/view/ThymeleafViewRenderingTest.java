@@ -133,7 +133,7 @@ class ThymeleafViewRenderingTest {
     context.setVariable("githubLoginUrl", "/oauth2/authorization/github");
     context.setVariable("canUnlinkOAuth", false);
     context.setVariable("passkeys", List.of(
-        Map.of("id", "pk-1", "name", "MacBook Touch ID", "createdAt", "2026-10-01")
+        Map.of("id", "pk-1", "name", "MacBook Touch ID", "formattedCreatedAt", "Oct 01, 2026")
     ));
 
     String html = templateEngine.process("dashboard", context);
@@ -142,7 +142,8 @@ class ThymeleafViewRenderingTest {
     assertThat(html).contains("No Local Password Set");
     assertThat(html).contains("Set Password");
     assertThat(html).contains("MacBook Touch ID");
-    assertThat(html).contains("Verified");
+    assertThat(html).doesNotContain(">Verified<");
+    assertThat(html).contains("Added on Oct 01, 2026");
     assertThat(html).contains("Unlink");
     assertThat(html).contains("role=\"tablist\"");
     assertThat(html).contains("role=\"tab\"");
@@ -195,7 +196,7 @@ class ThymeleafViewRenderingTest {
     context.setVariable("githubLinked", true);
     context.setVariable("canUnlinkOAuth", true);
     context.setVariable("passkeys", List.of(
-        Map.of("id", "pk-key-1", "name", "YubiKey 5C", "createdAt", "2026-10-05")
+        Map.of("id", "pk-key-1", "name", "YubiKey 5C", "formattedCreatedAt", "Oct 05, 2026")
     ));
 
     String html = templateEngine.process("dashboard", context);

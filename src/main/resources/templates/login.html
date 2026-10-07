@@ -22,9 +22,9 @@
           <input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"
                  type="hidden"/>
 
-          <div th:replace="~{fragments/ui/fields :: floating('username', 'username', 'Email address', 'email', 'email', null, true)}"></div>
+          <div th:replace="~{fragments/ui/fields :: floating('username', 'username', 'Email address', 'email', 'email', null, true, null)}"></div>
 
-          <div th:replace="~{fragments/ui/fields :: floating('password', 'password', 'Password', 'password', 'current-password', null, false)}"></div>
+          <div th:replace="~{fragments/ui/fields :: floating('password', 'password', 'Password', 'password', 'current-password', null, false, null)}"></div>
 
           <div class="form-checkbox-row">
             <label th:replace="~{fragments/ui/checkboxes :: checkbox('remember-me', 'remember-me', 'Remember me', false, false)}"></label>

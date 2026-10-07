@@ -20,16 +20,16 @@
         <h2 class="column-title">Account Details</h2>
         <form class="auth-form" id="registerForm" method="post" th:action="@{/register}">
           <!-- Full Name Field -->
-          <div th:replace="~{fragments/ui/fields :: floating('regName', 'name', 'Full Name', 'text', 'name', null, true)}"></div>
+          <div th:replace="~{fragments/ui/fields :: floating('regName', 'name', 'Full Name', 'text', 'name', null, true, null)}"></div>
 
           <!-- Email Field -->
-          <div th:replace="~{fragments/ui/fields :: floating('regEmail', 'email', 'Email address', 'email', 'email', null, false)}"></div>
+          <div th:replace="~{fragments/ui/fields :: floating('regEmail', 'email', 'Email address', 'email', 'email', null, false, null)}"></div>
 
           <!-- Password Field -->
-          <div th:replace="~{fragments/ui/fields :: floating('regPassword', 'password', 'Password (min. 8 characters)', 'password', 'new-password', 8, false)}"></div>
+          <div th:replace="~{fragments/ui/fields :: floating('regPassword', 'password', 'Password', 'password', 'new-password', 8, false, 'Use at least 8 characters.')}"></div>
 
           <!-- Confirm Password Field -->
-          <div th:replace="~{fragments/ui/fields :: floating('regConfirmPassword', 'confirmPassword', 'Confirm Password', 'password', 'new-password', 8, false)}"></div>
+          <div th:replace="~{fragments/ui/fields :: floating('regConfirmPassword', 'confirmPassword', 'Confirm Password', 'password', 'new-password', 8, false, null)}"></div>
 
           <button th:replace="~{fragments/ui/buttons :: submit('Create Account', 'registerBtn')}"></button>
 
@@ -48,7 +48,7 @@
       </div>
 
       <!-- Right Column: Fast Sign-Up / OAuth & Passkeys Fragment -->
-      <div th:replace="~{fragments/social-login :: social-login('Fast Sign-Up')}"></div>
+      <div th:replace="~{fragments/social-login :: social-login('Other ways to continue')}"></div>
     </div>
   </div>
 </main>

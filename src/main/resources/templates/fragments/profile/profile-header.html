@@ -23,9 +23,6 @@
     <div class="profile-title-row">
       <h1 class="profile-name" th:text="${displayName != null and !displayName.isBlank() ? displayName : username}">John
         Doe</h1>
-      <span class="status-badge status-active">
-                <span class="status-dot"></span> Active
-            </span>
     </div>
     <p class="profile-email" th:text="${username}">user@example.com</p>
     <div class="profile-badges-row">

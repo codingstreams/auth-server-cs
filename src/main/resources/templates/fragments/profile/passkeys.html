@@ -32,9 +32,8 @@
           <div>
             <div class="passkey-name-row">
               <strong th:text="${pk.name != null ? pk.name : 'Hardware Passkey'}">My Device</strong>
-              <span th:replace="~{fragments/ui/badges :: badge('Verified', 'success')}"></span>
             </div>
-            <span class="passkey-meta" th:text="'Added on ' + (${pk.createdAt != null ? pk.createdAt : 'Recent'})">Added recently</span>
+            <span class="passkey-meta" th:text="'Added on ' + ${pk.formattedCreatedAt}">Added recently</span>
           </div>
         </div>
 
@@ -50,7 +49,7 @@
 
     <!-- Empty state when no passkeys -->
     <th:block th:if="${passkeys == null or passkeys.isEmpty()}">
-      <div th:replace="~{fragments/ui/empty-states :: empty('No passkeys registered yet. Register a passkey to sign in without typing your password.', 'passkey')}"></div>
+      <div th:replace="~{fragments/ui/empty-states :: empty('No passkeys registered yet. Add one below to sign in without a password.', 'passkey')}"></div>
     </th:block>
   </div>
 
