@@ -1038,12 +1038,21 @@ input[readonly] {
 }
 
 .tab-pane {
-    display: none;
+    display: block;
+}
+
+.tab-pane[hidden] {
+    display: none !important;
 }
 
 .tab-pane.active {
     display: block;
     animation: fadeIn 0.2s ease-in-out;
+}
+
+.tab-pane:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 4px;
 }
 
 @keyframes fadeIn {

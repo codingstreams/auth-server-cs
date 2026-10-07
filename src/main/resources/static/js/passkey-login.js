@@ -135,7 +135,7 @@ async function handlePasskeyLogin() {
       console.info("Passkey operation cancelled by user.");
     } else {
       console.error("Passkey Authentication Error:", err);
-      alert(err.message || "An error occurred during passkey sign-in.");
+      showInPagePasskeyAlert(err.message || "An error occurred during passkey sign-in.");
     }
   } finally {
     if (passkeyLoginBtn) {
@@ -143,4 +143,44 @@ async function handlePasskeyLogin() {
       passkeyLoginBtn.innerHTML = originalContent;
     }
   }
+}
+
+function showInPagePasskeyAlert(message) {
+  let alertsContainer = document.querySelector('.alerts-container');
+  if (!alertsContainer) {
+    const card = document.querySelector('.auth-card');
+    if (card) {
+      alertsContainer = document.createElement('div');
+      alertsContainer.className = 'alerts-container';
+      const header = card.querySelector('.auth-header');
+      if (header) {
+        header.after(alertsContainer);
+      } else {
+        card.prepend(alertsContainer);
+      }
+    }
+  }
+
+  if (alertsContainer) {
+    const alert = document.createElement('div');
+    alert.className = 'alert alert-error';
+    alert.setAttribute('role', 'alert');
+    alert.innerHTML = `
+      <svg aria-hidden="true" focusable="false" fill="none" height="16" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" x2="12" y1="8" y2="12"></line>
+        <line x1="12" x2="12.01" y1="16" y2="16"></line>
+      </svg>
+      <span>${escapeHtml(message)}</span>
+    `;
+    alertsContainer.innerHTML = '';
+    alertsContainer.appendChild(alert);
+    alert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }

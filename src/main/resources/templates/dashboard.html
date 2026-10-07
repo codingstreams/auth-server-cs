@@ -13,32 +13,36 @@
     <div th:replace="~{fragments/alerts :: alerts}"></div>
 
     <!-- Navigation Tabs / Sections for Profile Management -->
-    <nav aria-label="Profile navigation" class="profile-nav-tabs">
-      <button class="nav-tab-btn active" data-tab="tab-general" type="button">General</button>
-      <button class="nav-tab-btn" data-tab="tab-security" type="button">Password</button>
-      <button class="nav-tab-btn" data-tab="tab-oauth" type="button">Connected Accounts</button>
-      <button class="nav-tab-btn" data-tab="tab-passkeys" type="button">Passkeys</button>
-    </nav>
+    <div aria-label="Profile navigation" class="profile-nav-tabs" role="tablist">
+      <button aria-controls="tab-general" aria-selected="true" class="nav-tab-btn active"
+              data-tab="tab-general" id="tab-btn-general" role="tab" tabindex="0" type="button">General</button>
+      <button aria-controls="tab-security" aria-selected="false" class="nav-tab-btn"
+              data-tab="tab-security" id="tab-btn-security" role="tab" tabindex="-1" type="button">Password</button>
+      <button aria-controls="tab-oauth" aria-selected="false" class="nav-tab-btn"
+              data-tab="tab-oauth" id="tab-btn-oauth" role="tab" tabindex="-1" type="button">Connected Accounts</button>
+      <button aria-controls="tab-passkeys" aria-selected="false" class="nav-tab-btn"
+              data-tab="tab-passkeys" id="tab-btn-passkeys" role="tab" tabindex="-1" type="button">Passkeys</button>
+    </div>
 
     <!-- Tab 1: General Info & Avatar -->
-    <div class="tab-pane active" id="tab-general">
+    <section aria-labelledby="tab-btn-general" class="tab-pane active" id="tab-general" role="tabpanel" tabindex="0">
       <div th:replace="~{fragments/profile/profile-info :: profile-info}"></div>
-    </div>
+    </section>
 
     <!-- Tab 2: Password & Credentials -->
-    <div class="tab-pane" id="tab-security">
+    <section aria-labelledby="tab-btn-security" class="tab-pane" hidden id="tab-security" role="tabpanel" tabindex="0">
       <div th:replace="~{fragments/profile/security-password :: security-password}"></div>
-    </div>
+    </section>
 
     <!-- Tab 3: Connected OAuth Methods -->
-    <div class="tab-pane" id="tab-oauth">
+    <section aria-labelledby="tab-btn-oauth" class="tab-pane" hidden id="tab-oauth" role="tabpanel" tabindex="0">
       <div th:replace="~{fragments/profile/oauth-methods :: oauth-methods}"></div>
-    </div>
+    </section>
 
     <!-- Tab 4: Passkeys -->
-    <div class="tab-pane" id="tab-passkeys">
+    <section aria-labelledby="tab-btn-passkeys" class="tab-pane" hidden id="tab-passkeys" role="tabpanel" tabindex="0">
       <div th:replace="~{fragments/profile/passkeys :: passkeys}"></div>
-    </div>
+    </section>
   </div>
 </main>
 

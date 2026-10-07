@@ -57,30 +57,49 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // 3. Tab Switching on Profile Page (dashboard.html)
-  const tabButtons = document.querySelectorAll('.profile-nav-tabs .nav-tab-btn');
-  const tabPanes = document.querySelectorAll('.tab-pane');
+  const tabList = document.querySelector('.profile-nav-tabs[role="tablist"]');
+  const tabButtons = Array.from(document.querySelectorAll('.profile-nav-tabs .nav-tab-btn'));
+  const tabPanes = Array.from(document.querySelectorAll('.tab-pane'));
 
-  function activateTab(tabId) {
-    if (!tabId) return;
-    const targetPane = document.getElementById(tabId);
-    if (!targetPane) return;
+  function activateTab(tabId, focusTab = false) {
+    if (!tabButtons.length || !tabPanes.length) return;
+
+    // Fallback to General if tabId is empty or doesn't match an existing pane
+    let resolvedId = tabId;
+    if (!resolvedId || !document.getElementById(resolvedId)) {
+      resolvedId = 'tab-general';
+    }
+
+    let activeBtn = null;
 
     tabButtons.forEach(btn => {
-      const isActive = btn.getAttribute('data-tab') === tabId;
-      btn.classList.toggle('active', isActive);
-      btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
-      if (isActive) {
+      const isTarget = btn.getAttribute('data-tab') === resolvedId;
+      btn.classList.toggle('active', isTarget);
+      btn.setAttribute('aria-selected', isTarget ? 'true' : 'false');
+      btn.setAttribute('tabindex', isTarget ? '0' : '-1');
+
+      if (isTarget) {
+        activeBtn = btn;
         btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+        if (focusTab) {
+          btn.focus();
+        }
       }
     });
 
     tabPanes.forEach(pane => {
-      pane.classList.toggle('active', pane.id === tabId);
+      const isTarget = pane.id === resolvedId;
+      pane.classList.toggle('active', isTarget);
+      if (isTarget) {
+        pane.removeAttribute('hidden');
+      } else {
+        pane.setAttribute('hidden', '');
+      }
     });
 
     // Update URL hash without scroll jump
     try {
-      history.replaceState(null, null, '#' + tabId);
+      history.replaceState(null, null, '#' + resolvedId);
     } catch (e) {
     }
   }
@@ -88,15 +107,43 @@ document.addEventListener('DOMContentLoaded', () => {
   tabButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const targetId = btn.getAttribute('data-tab');
-      activateTab(targetId);
+      activateTab(targetId, false);
     });
   });
 
-  // Check URL hash on page load
-  if (window.location.hash) {
-    const hashTab = window.location.hash.replace('#', '');
-    if (document.getElementById(hashTab)) {
-      activateTab(hashTab);
+  // Roving tab focus and keyboard navigation (Left/Right, Home/End)
+  if (tabList) {
+    tabList.addEventListener('keydown', (e) => {
+      const currentIndex = tabButtons.findIndex(btn => btn === document.activeElement);
+      if (currentIndex === -1) return;
+
+      let nextIndex = null;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        nextIndex = (currentIndex + 1) % tabButtons.length;
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        nextIndex = (currentIndex - 1 + tabButtons.length) % tabButtons.length;
+      } else if (e.key === 'Home') {
+        nextIndex = 0;
+      } else if (e.key === 'End') {
+        nextIndex = tabButtons.length - 1;
+      }
+
+      if (nextIndex !== null) {
+        e.preventDefault();
+        const nextBtn = tabButtons[nextIndex];
+        const targetId = nextBtn.getAttribute('data-tab');
+        activateTab(targetId, true);
+      }
+    });
+  }
+
+  // Restore valid URL hash on page load or fallback to tab-general
+  if (tabButtons.length > 0) {
+    const rawHash = window.location.hash ? window.location.hash.replace('#', '') : '';
+    if (rawHash && document.getElementById(rawHash)) {
+      activateTab(rawHash, false);
+    } else {
+      activateTab('tab-general', false);
     }
   }
 
@@ -135,20 +182,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Security tab password confirmation
-  const newPassword = document.getElementById('newPassword');
-  const confirmNewPassword = document.getElementById('confirmNewPassword');
-  if (newPassword && confirmNewPassword) {
-    function checkSecurityPasswordsMatch() {
-      if (newPassword.value !== confirmNewPassword.value) {
-        confirmNewPassword.setCustomValidity('Passwords do not match');
-      } else {
-        confirmNewPassword.setCustomValidity('');
+  // Security tab password confirmation (works for both existing password and OAuth set-password forms)
+  function attachPasswordMatchValidation(pwdId, confirmPwdId) {
+    const pwd = document.getElementById(pwdId);
+    const confirmPwd = document.getElementById(confirmPwdId);
+    if (pwd && confirmPwd) {
+      function checkMatch() {
+        if (pwd.value && confirmPwd.value && pwd.value !== confirmPwd.value) {
+          confirmPwd.setCustomValidity('Passwords do not match');
+        } else {
+          confirmPwd.setCustomValidity('');
+        }
       }
+      pwd.addEventListener('input', checkMatch);
+      confirmPwd.addEventListener('input', checkMatch);
     }
+  }
 
-    newPassword.addEventListener('input', checkSecurityPasswordsMatch);
-    confirmNewPassword.addEventListener('input', checkSecurityPasswordsMatch);
+  attachPasswordMatchValidation('newPassword', 'confirmNewPassword');
+  attachPasswordMatchValidation('setNewPassword', 'setConfirmPassword');
+
+  // Avatar URL input live preview with fallback handling
+  const avatarUrlInput = document.getElementById('avatarUrlInput');
+  if (avatarUrlInput) {
+    avatarUrlInput.addEventListener('input', () => {
+      window.selectPresetAvatar(avatarUrlInput.value);
+    });
   }
 
   // 6. Form Submission Spinner Feedback
@@ -174,22 +233,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /**
  * Avatar Preset Selection Helper (Accessible Globally for inline onclick)
- * @param {string} url - Preset SVG avatar URL
+ * @param {string} url - Preset SVG avatar URL or empty for reset
  */
 window.selectPresetAvatar = function (url) {
   const avatarInput = document.getElementById('avatarUrlInput');
   const avatarDisplay = document.getElementById('avatarDisplay');
 
-  if (avatarInput) {
+  if (avatarInput && avatarInput.value !== url) {
     avatarInput.value = url;
   }
 
   if (avatarDisplay) {
-    if (url && url.trim() !== '') {
-      let avatarImg = document.getElementById('avatarImg');
-      const avatarInitials = document.getElementById('avatarInitials');
-      if (avatarInitials) avatarInitials.style.display = 'none';
+    const avatarInitials = document.getElementById('avatarInitials');
+    let avatarImg = document.getElementById('avatarImg');
 
+    if (url && url.trim() !== '') {
       if (!avatarImg) {
         avatarImg = document.createElement('img');
         avatarImg.id = 'avatarImg';
@@ -197,11 +255,16 @@ window.selectPresetAvatar = function (url) {
         avatarImg.alt = 'User Avatar';
         avatarDisplay.appendChild(avatarImg);
       }
+
+      avatarImg.onerror = function () {
+        avatarImg.style.display = 'none';
+        if (avatarInitials) avatarInitials.style.display = 'block';
+      };
+
       avatarImg.src = url;
       avatarImg.style.display = 'block';
+      if (avatarInitials) avatarInitials.style.display = 'none';
     } else {
-      const avatarImg = document.getElementById('avatarImg');
-      const avatarInitials = document.getElementById('avatarInitials');
       if (avatarImg) avatarImg.style.display = 'none';
       if (avatarInitials) avatarInitials.style.display = 'block';
     }

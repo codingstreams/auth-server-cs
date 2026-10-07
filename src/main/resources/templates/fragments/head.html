@@ -10,7 +10,7 @@
     (function () {
       try {
         const savedTheme = localStorage.getItem('auth_theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: light)').matches;
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
           document.documentElement.classList.add('dark');
         } else {

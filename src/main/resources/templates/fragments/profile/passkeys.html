@@ -41,7 +41,9 @@
         <form method="post" th:action="@{/profile/passkeys/remove}">
           <input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
           <input name="passkeyId" th:value="${pk.id != null ? pk.id : pk.name}" type="hidden"/>
-          <button th:replace="~{fragments/ui/buttons :: button('Remove', 'outline-danger', 'submit', null, false)}"></button>
+          <button class="btn btn-outline-danger" th:aria-label="'Remove passkey ' + ${pk.name != null ? pk.name : 'credential'}" type="submit">
+            <span>Remove</span>
+          </button>
         </form>
       </div>
     </th:block>

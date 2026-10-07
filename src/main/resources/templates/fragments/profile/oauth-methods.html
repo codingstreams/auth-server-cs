@@ -68,7 +68,9 @@
         <form method="post" th:action="@{/profile/oauth/unlink}" th:if="${googleLinked}">
           <input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
           <input name="provider" type="hidden" value="google"/>
-          <button th:replace="~{fragments/ui/buttons :: button('Unlink', 'outline-danger', 'submit', null, ${!canUnlinkOAuth})}"></button>
+          <button class="btn btn-outline-danger" th:aria-label="'Unlink Google account'" th:disabled="${!canUnlinkOAuth}" type="submit">
+            <span>Unlink</span>
+          </button>
         </form>
         <!-- If not linked: Connect Button -->
         <a class="btn btn-secondary" href="/oauth2/authorization/google"
@@ -108,7 +110,9 @@
         <form method="post" th:action="@{/profile/oauth/unlink}" th:if="${githubLinked}">
           <input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
           <input name="provider" type="hidden" value="github"/>
-          <button th:replace="~{fragments/ui/buttons :: button('Unlink', 'outline-danger', 'submit', null, ${!canUnlinkOAuth})}"></button>
+          <button class="btn btn-outline-danger" th:aria-label="'Unlink GitHub account'" th:disabled="${!canUnlinkOAuth}" type="submit">
+            <span>Unlink</span>
+          </button>
         </form>
         <!-- If not linked: Connect Button -->
         <a class="btn btn-secondary" href="/oauth2/authorization/github"

@@ -48,7 +48,7 @@ function bufferToBase64Url(buffer) {
  */
 async function handlePasskeyRegistration() {
   if (!window.PublicKeyCredential) {
-    alert("Passkeys/WebAuthn are not supported on this device or browser.");
+    showInPagePasskeyAlert("Passkeys and WebAuthn are not supported on this device or browser.");
     return;
   }
 
@@ -62,8 +62,8 @@ async function handlePasskeyRegistration() {
   let email = emailEl ? (emailEl.textContent || emailEl.value).trim() : "";
 
   if (!email) {
-    email = prompt("Enter your account email to link this passkey:");
-    if (!email) return;
+    showInPagePasskeyAlert("User account email could not be determined. Please reload the page.");
+    return;
   }
 
   try {
@@ -150,7 +150,7 @@ async function handlePasskeyRegistration() {
       console.info("User cancelled the passkey creation process.");
     } else {
       console.error("Passkey Registration Error:", err);
-      alert(err.message || "An error occurred during passkey registration.");
+      showInPagePasskeyAlert(err.message || "An error occurred during passkey registration.");
     }
   } finally {
     if (registerBtn) {
@@ -158,4 +158,44 @@ async function handlePasskeyRegistration() {
       registerBtn.innerHTML = originalText;
     }
   }
+}
+
+function showInPagePasskeyAlert(message) {
+  let alertsContainer = document.querySelector('.alerts-container');
+  if (!alertsContainer) {
+    const mainContainer = document.querySelector('.profile-container');
+    if (mainContainer) {
+      alertsContainer = document.createElement('div');
+      alertsContainer.className = 'alerts-container';
+      const header = mainContainer.querySelector('.profile-header-card');
+      if (header) {
+        header.after(alertsContainer);
+      } else {
+        mainContainer.prepend(alertsContainer);
+      }
+    }
+  }
+
+  if (alertsContainer) {
+    const alert = document.createElement('div');
+    alert.className = 'alert alert-error';
+    alert.setAttribute('role', 'alert');
+    alert.innerHTML = `
+      <svg aria-hidden="true" focusable="false" fill="none" height="16" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" x2="12" y1="8" y2="12"></line>
+        <line x1="12" x2="12.01" y1="16" y2="16"></line>
+      </svg>
+      <span>${escapeHtml(message)}</span>
+    `;
+    alertsContainer.innerHTML = '';
+    alertsContainer.appendChild(alert);
+    alert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }

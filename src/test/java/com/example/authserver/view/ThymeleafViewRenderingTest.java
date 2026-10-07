@@ -143,6 +143,11 @@ class ThymeleafViewRenderingTest {
     assertThat(html).contains("MacBook Touch ID");
     assertThat(html).contains("Verified");
     assertThat(html).contains("Unlink");
+    assertThat(html).contains("role=\"tablist\"");
+    assertThat(html).contains("role=\"tab\"");
+    assertThat(html).contains("role=\"tabpanel\"");
+    assertThat(html).contains("aria-controls=\"tab-general\"");
+    assertThat(html).contains("aria-labelledby=\"tab-btn-general\"");
     assertThat(html).contains("for=\"primaryEmailInput\"");
     assertThat(html).contains("for=\"avatarUrlInput\"");
     assertThat(html).contains("for=\"passkeyNameInput\"");
@@ -160,5 +165,42 @@ class ThymeleafViewRenderingTest {
 
     assertThat(html).contains("Current password is incorrect.");
     assertThat(html).contains("Account created successfully! Please sign in.");
+  }
+
+  @Test
+  @DisplayName("register.html includes passkey-login script and accessible structure")
+  void testRegisterIncludesPasskeyScript() {
+    MockHttpServletRequest request = new MockHttpServletRequest(servletContext);
+    org.thymeleaf.context.IContext context = createWebContext(request);
+
+    String html = templateEngine.process("register", context);
+
+    assertThat(html).contains("src=\"/js/passkey-login.js\"");
+    assertThat(html).contains("id=\"passkeyLoginBtn\"");
+  }
+
+  @Test
+  @DisplayName("dashboard.html renders descriptive aria-labels for passkey remove and oauth unlink")
+  void testDashboardDescriptiveAriaLabels() {
+    MockHttpServletRequest request = new MockHttpServletRequest(servletContext);
+    org.thymeleaf.context.WebContext context = (org.thymeleaf.context.WebContext) createWebContext(request);
+    context.setVariable("displayName", "Charlie Test");
+    context.setVariable("username", "charlie@test.com");
+    context.setVariable("avatarUrl", null);
+    context.setVariable("provider", "LOCAL");
+    context.setVariable("authorities", List.of(Map.of("authority", "ROLE_USER")));
+    context.setVariable("hasPassword", true);
+    context.setVariable("googleLinked", true);
+    context.setVariable("githubLinked", true);
+    context.setVariable("canUnlinkOAuth", true);
+    context.setVariable("passkeys", List.of(
+        Map.of("id", "pk-key-1", "name", "YubiKey 5C", "createdAt", "2026-10-05")
+    ));
+
+    String html = templateEngine.process("dashboard", context);
+
+    assertThat(html).contains("aria-label=\"Remove passkey YubiKey 5C\"");
+    assertThat(html).contains("aria-label=\"Unlink Google account\"");
+    assertThat(html).contains("aria-label=\"Unlink GitHub account\"");
   }
 }
