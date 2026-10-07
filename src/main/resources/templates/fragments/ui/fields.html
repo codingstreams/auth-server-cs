@@ -21,7 +21,7 @@
            th:autocomplete="${autocomplete}" th:minlength="${minlength}" th:autofocus="${autofocus}">
     <label class="floating-label" th:for="${id}" th:text="${label}">Label</label>
     <th:block th:if="${type == 'password'}">
-      <button aria-label="Toggle password visibility" class="toggle-password-btn" title="Toggle password visibility"
+      <button aria-label="Show password" class="toggle-password-btn" title="Show password"
               type="button" th:id="${id == 'password' ? 'togglePasswordBtn' : null}" th:attr="aria-controls=${id}">
         <th:block th:replace="~{fragments/ui/icons :: icon('eye-open')}"></th:block>
         <th:block th:replace="~{fragments/ui/icons :: icon('eye-closed')}"></th:block>

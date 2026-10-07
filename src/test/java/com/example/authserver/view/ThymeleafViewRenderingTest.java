@@ -143,6 +143,9 @@ class ThymeleafViewRenderingTest {
     assertThat(html).contains("MacBook Touch ID");
     assertThat(html).contains("Verified");
     assertThat(html).contains("Unlink");
+    assertThat(html).contains("for=\"primaryEmailInput\"");
+    assertThat(html).contains("for=\"avatarUrlInput\"");
+    assertThat(html).contains("for=\"passkeyNameInput\"");
   }
 
   @Test

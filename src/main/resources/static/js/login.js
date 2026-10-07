@@ -43,6 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const isPassword = input.getAttribute('type') === 'password';
       input.setAttribute('type', isPassword ? 'text' : 'password');
 
+      const labelText = isPassword ? 'Hide password' : 'Show password';
+      btn.setAttribute('aria-label', labelText);
+      btn.setAttribute('title', labelText);
+
       const eyeOpen = btn.querySelector('.eye-open');
       const eyeClosed = btn.querySelector('.eye-closed');
       if (eyeOpen && eyeClosed) {
@@ -65,6 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const isActive = btn.getAttribute('data-tab') === tabId;
       btn.classList.toggle('active', isActive);
       btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      if (isActive) {
+        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      }
     });
 
     tabPanes.forEach(pane => {

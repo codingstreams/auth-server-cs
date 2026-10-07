@@ -56,18 +56,21 @@
   <div class="add-passkey-box">
     <form class="add-passkey-form" method="post" th:action="@{/profile/passkeys/add}">
       <input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
-      <div class="input-inline-group">
-        <div class="input-wrapper">
-          <input id="passkeyNameInput" name="passkeyName" placeholder="e.g. MacBook Touch ID, YubiKey 5" required
-                 type="text">
+      <div class="form-group">
+        <label for="passkeyNameInput">Passkey Device Name</label>
+        <div class="input-inline-group">
+          <div class="input-wrapper">
+            <input id="passkeyNameInput" name="passkeyName" placeholder="e.g. MacBook Touch ID, YubiKey 5" required
+                   type="text">
+          </div>
+          <button class="btn btn-primary" id="registerPasskeyBtn" type="submit">
+            <svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15">
+              <line x1="12" x2="12" y1="5" y2="19"></line>
+              <line x1="5" x2="19" y1="12" y2="12"></line>
+            </svg>
+            <span>Add Passkey</span>
+          </button>
         </div>
-        <button class="btn btn-primary" id="registerPasskeyBtn" type="submit">
-          <svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15">
-            <line x1="12" x2="12" y1="5" y2="19"></line>
-            <line x1="5" x2="19" y1="12" y2="12"></line>
-          </svg>
-          <span>Add Passkey</span>
-        </button>
       </div>
     </form>
   </div>
