@@ -39,12 +39,12 @@ class DashboardViewControllerTest {
   }
 
   @Test
-  @DisplayName("updateName delegates to appUserService and redirects to success tab-general")
+  @DisplayName("updateName delegates to appUserService and redirects to dashboard tab-general")
   void testUpdateName() {
     final String newDisplayName = "Bob Smith";
     final String viewName = dashboardViewController.updateName(newDisplayName);
 
-    assertThat(viewName).isEqualTo("redirect:/success?updated=name#tab-general");
+    assertThat(viewName).isEqualTo("redirect:/dashboard?updated=name#tab-general");
     assertThat(capturedRequest.get()).isNotNull();
     assertThat(capturedRequest.get().fullName()).isEqualTo(newDisplayName);
   }

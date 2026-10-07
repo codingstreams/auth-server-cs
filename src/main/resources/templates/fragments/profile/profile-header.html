@@ -29,8 +29,12 @@
     </div>
     <p class="profile-email" th:text="${username}">user@example.com</p>
     <div class="profile-badges-row">
-      <span class="badge badge-provider" th:if="${provider != null}" th:text="'Provider: ' + ${provider}">Provider: LOCAL</span>
-      <span class="badge badge-role" th:each="auth : ${authorities}" th:text="${auth.authority}">ROLE_USER</span>
+      <th:block th:if="${provider != null}">
+        <span th:replace="~{fragments/ui/badges :: badge('Provider: ' + ${provider}, 'provider')}"></span>
+      </th:block>
+      <th:block th:each="auth : ${authorities}">
+        <span th:replace="~{fragments/ui/badges :: badge(${auth.authority}, 'role')}"></span>
+      </th:block>
     </div>
   </div>
 </section>

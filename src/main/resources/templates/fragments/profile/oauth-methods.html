@@ -51,8 +51,12 @@
         <div>
           <div class="oauth-item-title-row">
             <span class="oauth-provider-name">Google</span>
-            <span class="badge badge-success" th:if="${googleLinked}">Connected</span>
-            <span class="badge badge-muted" th:unless="${googleLinked}">Not Connected</span>
+            <th:block th:if="${googleLinked}">
+              <span th:replace="~{fragments/ui/badges :: badge('Connected', 'success')}"></span>
+            </th:block>
+            <th:block th:unless="${googleLinked}">
+              <span th:replace="~{fragments/ui/badges :: badge('Not Connected', 'muted')}"></span>
+            </th:block>
           </div>
           <p class="oauth-item-meta" th:if="${googleLinked}">Linked for fast sign-in with your Google identity</p>
           <p class="oauth-item-meta" th:unless="${googleLinked}">Link Google to sign in with one click</p>
@@ -64,10 +68,7 @@
         <form method="post" th:action="@{/profile/oauth/unlink}" th:if="${googleLinked}">
           <input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
           <input name="provider" type="hidden" value="google"/>
-          <button class="btn btn-outline-danger" th:disabled="${!canUnlinkOAuth}"
-                  th:title="${!canUnlinkOAuth ? 'Cannot unlink: this is your only login method' : 'Unlink Google account'}"
-                  type="submit">Unlink
-          </button>
+          <button th:replace="~{fragments/ui/buttons :: button('Unlink', 'outline-danger', 'submit', null, ${!canUnlinkOAuth})}"></button>
         </form>
         <!-- If not linked: Connect Button -->
         <a class="btn btn-secondary" href="/oauth2/authorization/google"
@@ -90,8 +91,12 @@
         <div>
           <div class="oauth-item-title-row">
             <span class="oauth-provider-name">GitHub</span>
-            <span class="badge badge-success" th:if="${githubLinked}">Connected</span>
-            <span class="badge badge-muted" th:unless="${githubLinked}">Not Connected</span>
+            <th:block th:if="${githubLinked}">
+              <span th:replace="~{fragments/ui/badges :: badge('Connected', 'success')}"></span>
+            </th:block>
+            <th:block th:unless="${githubLinked}">
+              <span th:replace="~{fragments/ui/badges :: badge('Not Connected', 'muted')}"></span>
+            </th:block>
           </div>
           <p class="oauth-item-meta" th:if="${githubLinked}">Linked for fast sign-in with your GitHub identity</p>
           <p class="oauth-item-meta" th:unless="${githubLinked}">Link GitHub to sign in with one click</p>
@@ -103,10 +108,7 @@
         <form method="post" th:action="@{/profile/oauth/unlink}" th:if="${githubLinked}">
           <input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
           <input name="provider" type="hidden" value="github"/>
-          <button class="btn btn-outline-danger" th:disabled="${!canUnlinkOAuth}"
-                  th:title="${!canUnlinkOAuth ? 'Cannot unlink: this is your only login method' : 'Unlink GitHub account'}"
-                  type="submit">Unlink
-          </button>
+          <button th:replace="~{fragments/ui/buttons :: button('Unlink', 'outline-danger', 'submit', null, ${!canUnlinkOAuth})}"></button>
         </form>
         <!-- If not linked: Connect Button -->
         <a class="btn btn-secondary" href="/oauth2/authorization/github"

@@ -39,7 +39,7 @@
         <span class="navbar-user-chip"
               th:text="${displayName != null and !displayName.isBlank() ? displayName : username}">user@example.com</span>
         <form class="navbar-logout-form" method="post" th:action="@{/logout}">
-          <button class="btn btn-outline-sm" type="submit">Sign Out</button>
+          <button th:replace="~{fragments/ui/buttons :: button('Sign Out', 'outline-sm', 'submit', null, false)}"></button>
         </form>
       </th:block>
     </div>

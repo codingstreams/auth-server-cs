@@ -18,7 +18,9 @@
   <div class="detail-row">
     <span class="detail-label">Granted Authorities:</span>
     <div class="authorities-list">
-      <span class="badge badge-role" th:each="auth : ${authorities}" th:text="${auth.authority}">ROLE_USER</span>
+      <th:block th:each="auth : ${authorities}">
+        <span th:replace="~{fragments/ui/badges :: badge(${auth.authority}, 'role')}"></span>
+      </th:block>
       <span class="text-muted"
             th:if="${authorities == null or #lists.isEmpty(authorities)}">Standard User Permissions</span>
     </div>

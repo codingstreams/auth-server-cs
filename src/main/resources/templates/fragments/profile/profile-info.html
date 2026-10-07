@@ -27,7 +27,7 @@
           <input autocomplete="name" id="displayNameInput" name="displayName" placeholder="Enter your full name"
                  required th:value="${displayName}" type="text">
         </div>
-        <button class="btn btn-secondary" type="submit">Save Name</button>
+        <button th:replace="~{fragments/ui/buttons :: button('Save Name', 'secondary', 'submit', null, false)}"></button>
       </div>
     </div>
 
@@ -50,7 +50,7 @@
           <input id="avatarUrlInput" name="avatarUrl" placeholder="https://example.com/avatar.png"
                  th:value="${avatarUrl}" type="url">
         </div>
-        <button class="btn btn-secondary" type="submit">Update Avatar</button>
+        <button th:replace="~{fragments/ui/buttons :: button('Update Avatar', 'secondary', 'submit', null, false)}"></button>
       </div>
       <div class="avatar-presets">
         <span class="avatar-presets-label">Or choose a preset:</span>
