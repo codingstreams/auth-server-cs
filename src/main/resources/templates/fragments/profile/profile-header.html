@@ -26,14 +26,16 @@
       <h1 class="profile-name" th:text="${displayName != null and !displayName.isBlank() ? displayName : username}">John
         Doe</h1>
     </div>
-    <p class="profile-email" th:text="${username}">user@example.com</p>
-    <div class="profile-badges-row">
-      <th:block th:if="${provider != null}">
-        <span th:replace="~{fragments/ui/badges :: badge('Provider: ' + ${provider}, 'provider')}"></span>
-      </th:block>
-      <th:block th:each="auth : ${authorities}">
-        <span th:replace="~{fragments/ui/badges :: badge(${auth.authority}, 'role')}"></span>
-      </th:block>
+    <div class="profile-meta-row">
+      <p class="profile-email" th:text="${username}">user@example.com</p>
+      <div class="profile-badges-row">
+        <th:block th:if="${provider != null}">
+          <span th:replace="~{fragments/ui/badges :: badge('Provider: ' + ${provider}, 'provider')}"></span>
+        </th:block>
+        <th:block th:each="auth : ${authorities}">
+          <span th:replace="~{fragments/ui/badges :: badge(${auth.authority}, 'role')}"></span>
+        </th:block>
+      </div>
     </div>
   </div>
   </div>
